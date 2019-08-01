@@ -73,6 +73,34 @@ return [
                 'adm-persona/update/<id>'=>'adm-persona/update',
                 'adm-persona/delete/<id>'=>'adm-persona/delete',
 
+                // Doc_Especialidad
+                'doc-especialidad'=>'doc-especialidad/index',
+                'doc-especialidad/view/<id>'=>'doc-especialidad/view',
+                'doc-especialidad/create'=>'doc-especialidad/create',
+                'doc-especialidad/update/<id>'=>'doc-especialidad/update',
+                'doc-especialidad/delete/<id>'=>'doc-especialidad/delete',
+
+                // Doc_Estudiante
+                'doc-estudiante'=>'doc-estudiante/index',
+                'doc-estudiante/view/<id>'=>'doc-estudiante/view',
+                'doc-estudiante/create'=>'doc-estudiante/create',
+                'doc-estudiante/update/<id>'=>'doc-estudiante/update',
+                'doc-estudiante/delete/<id>'=>'doc-estudiante/delete',
+
+                // Doc_Grupo
+                'doc-grupo'=>'doc-grupo/index',
+                'doc-grupo/view/<id>'=>'doc-grupo/view',
+                'doc-grupo/create'=>'doc-grupo/create',
+                'doc-grupo/update/<id>'=>'doc-grupo/update',
+                'doc-grupo/delete/<id>'=>'doc-grupo/delete',
+
+                // Doc_Profesor
+                'doc-profesor'=>'doc-profesor/index',
+                'doc-profesor/view/<id>'=>'doc-profesor/view',
+                'doc-profesor/create'=>'doc-profesor/create',
+                'doc-profesor/update/<id>'=>'doc-profesor/update',
+                'doc-profesor/delete/<id>'=>'doc-profesor/delete',
+
                 // Begin borrar ejemplo
                 'employees'=>'employee/index',
                 'employees/view/<id>'=>'employee/view',

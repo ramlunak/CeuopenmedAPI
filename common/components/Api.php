@@ -160,7 +160,7 @@ class Api extends Component
             return ($new_access_token);
         } else {
 
-            Yii::$app->api->sendFailedResponse("Invalid Access token2");
+            Yii::$app->api->sendFailedResponse("Token de Acceso inválido.");
         }
     }
 

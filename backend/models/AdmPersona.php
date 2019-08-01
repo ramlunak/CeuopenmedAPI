@@ -61,10 +61,7 @@ class AdmPersona extends ActiveRecord
     }
 
     static public function search($params)
-    {
-
-        //$page = Yii::$app->getRequest()->getQueryParam('page');
-        //$limit = Yii::$app->getRequest()->getQueryParam('limit');
+    {        
         $order = Yii::$app->getRequest()->getQueryParam('order');
 
         $search = Yii::$app->getRequest()->getQueryParam('search');
@@ -73,19 +70,13 @@ class AdmPersona extends ActiveRecord
             $params=$search;
         }
 
-
-
-        //$limit = isset($limit) ? $limit : 10;
-        //$page = isset($page) ? $page : 1;
-
-
-        //$offset = ($page - 1) * $limit;
-
+       
         $query = AdmPersona::find()
-            ->select(['IdPersona', 'PrimerNombre', 'SegundoNombre', 'ApellidoPaterno', 'ApellidoMaterno'])
+            ->select([ '{{adm_persona}}.*', "CONCAT(
+                PrimerNombre, ' ', IFNULL(SegundoNombre, ''), ' ', 
+                ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto" ])
             ->asArray(true);
-            //->limit($limit)
-            //->offset($offset);
+            
 
         if(isset($params['IdPersona'])) {
             $query->andFilterWhere(['IdPersona' => $params['IdPersona']]);

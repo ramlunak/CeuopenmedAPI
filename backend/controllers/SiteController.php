@@ -78,7 +78,12 @@ class SiteController extends RestController
     public function actionMe()
     {
         $data = Yii::$app->user->identity;
+        $persona = $data->persona;
+
+        $rol = $data->rol;
         $data = $data->attributes;
+        $data['NombreCompleto'] = $persona->PrimerNombre.' '.$persona->SegundoNombre.' '.$persona->ApellidoPaterno.' '.$persona->ApellidoMaterno;
+        $data['Rol'] = $rol->Rol;
         unset($data['auth_key']);
         unset($data['password_hash']);
         unset($data['password_reset_token']);
@@ -90,14 +95,14 @@ class SiteController extends RestController
     {
 
         if (!isset($this->request["authorization_code"])) {
-            Yii::$app->api->sendFailedResponse("Authorization code missing");
+            Yii::$app->api->sendFailedResponse("Falta el Código de Autorización");
         }
 
         $authorization_code = $this->request["authorization_code"];
 
         $auth_code = AuthorizationCodes::isValid($authorization_code);
         if (!$auth_code) {
-            Yii::$app->api->sendFailedResponse("Invalid Authorization Code");
+            Yii::$app->api->sendFailedResponse("Código de Autorización inválido");
         }
 
         $accesstoken = Yii::$app->api->createAccesstoken($authorization_code);
@@ -142,10 +147,10 @@ class SiteController extends RestController
 
         if ($model->delete()) {
 
-            Yii::$app->api->sendSuccessResponse(["Logged Out Successfully"]);
+            Yii::$app->api->sendSuccessResponse(["Sección cerrada correctamente"]);
 
         } else {
-            Yii::$app->api->sendFailedResponse("Invalid Request");
+            Yii::$app->api->sendFailedResponse("Petición inválida");
         }
 
 
