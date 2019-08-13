@@ -11,7 +11,8 @@ use \yii\db\ActiveRecord;
  * @property int $IdEspecialidad
  * @property string $Especialidad
  *
- * @property DocProfesor[] $docProfesors
+ * @property DocProfesorHasDocEspecialidad[] $docProfesorHasDocEspecialidads
+ * @property DocProfesor[] $profesors
  */
 class DocEspecialidad extends ActiveRecord
 {
@@ -48,33 +49,41 @@ class DocEspecialidad extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocProfesors()
+    public function getDocProfesorHasDocEspecialidads()
     {
-        return $this->hasMany(DocProfesor::className(), ['IdEspecialidad' => 'IdEspecialidad']);
+        return $this->hasMany(DocProfesorHasDocEspecialidad::className(), ['IdEspecialidad' => 'IdEspecialidad']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProfesors()
+    {
+        return $this->hasMany(DocProfesor::className(), ['IdProfesor' => 'IdProfesor'])->viaTable('doc_profesor_has_doc_especialidad', ['IdEspecialidad' => 'IdEspecialidad']);
     }
 
     static public function search($params)
-    {        
+    {
         $order = Yii::$app->getRequest()->getQueryParam('order');
 
         $search = Yii::$app->getRequest()->getQueryParam('search');
 
-        if(isset($search)){
-            $params=$search;
+        if (isset($search)) {
+            $params = $search;
         }
-        
+
         $query = DocEspecialidad::find()
             ->select(['IdEspecialidad', 'Especialidad'])
-            ->asArray(true);            
+            ->asArray(true);
 
-        if(isset($params['IdEspecialidad'])) {
+        if (isset($params['IdEspecialidad'])) {
             $query->andFilterWhere(['IdEspecialidad' => $params['IdEspecialidad']]);
-        }        
-        if(isset($params['Especialidad'])) {
+        }
+        if (isset($params['Especialidad'])) {
             $query->andFilterWhere(['like', 'Especialidad', $params['Especialidad']]);
         }
 
-        if(isset($order)){
+        if (isset($order)) {
             $query->orderBy($order);
         }
 
@@ -82,7 +91,7 @@ class DocEspecialidad extends ActiveRecord
         $additional_info = [
             'page' => 'No Define',
             'size' => 'No Define',
-            'totalCount' => (int)$query->count()
+            'totalCount' => (int) $query->count()
         ];
 
         return [

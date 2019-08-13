@@ -2,13 +2,13 @@
 
 namespace backend\controllers;
 
-use app\models\SegRol;
+use app\models\Entidad;
 use backend\behaviours\Verbcheck;
 use backend\behaviours\Apiauth;
 
 use Yii;
 
-class SegRolController extends RestController
+class EntidadController extends RestController
 {
 
     public function behaviors()
@@ -40,13 +40,13 @@ class SegRolController extends RestController
     public function actionIndex()
     {
         $params = $this->request['search'];
-        $response = SegRol::search($params);
+        $response = Entidad::search($params);
         Yii::$app->api->sendSuccessResponse($response['data'], $response['info']);
     }
 
     public function actionCreate()
     {
-        $model = new SegRol;
+        $model = new Entidad;
         $model->attributes = $this->request;
 
         if ($model->save()) {
@@ -83,7 +83,7 @@ class SegRolController extends RestController
 
     protected function findModel($id)
     {
-        if (($model = SegRol::findOne($id)) !== null) {
+        if (($model = Entidad::findOne($id)) !== null) {
             return $model;
         } else {
             Yii::$app->api->sendFailedResponse("El Registro requerido no existe");

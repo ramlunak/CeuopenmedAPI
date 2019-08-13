@@ -3,10 +3,14 @@
 namespace backend\controllers;
 
 use app\models\DocProfesor;
+use app\models\DocGrupo;
 use backend\behaviours\Verbcheck;
 use backend\behaviours\Apiauth;
 
 use Yii;
+use app\models\DocProfesorHasDocGrupo;
+use app\models\DocEspecialidad;
+use app\models\DocProfesorHasDocEspecialidad;
 
 class DocProfesorController extends RestController
 {
@@ -18,11 +22,11 @@ class DocProfesorController extends RestController
 
         return $behaviors + [
 
-           'apiauth' => [
-               'class' => Apiauth::className(),
-               'exclude' => [],
-               'callback'=>[]
-           ],            
+            'apiauth' => [
+                'class' => Apiauth::className(),
+                'exclude' => [],
+                'callback' => []
+            ],
             'verbs' => [
                 'class' => Verbcheck::className(),
                 'actions' => [
@@ -71,7 +75,13 @@ class DocProfesorController extends RestController
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        Yii::$app->api->sendSuccessResponse($model->attributes);
+        $persona = $model->getPersona()->select(["CONCAT(
+            PrimerNombre, ' ', IFNULL(SegundoNombre, ''), ' ', 
+            ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto"])->asArray(true)->one();
+        $response = array_merge($model->attributes, $persona);
+        $especialidad = $model->getEspecialidad()->select(["Especialidad"])->asArray(true)->one();
+        $response = array_merge($response, $especialidad);
+        Yii::$app->api->sendSuccessResponse($response);
     }
 
     public function actionDelete($id)
@@ -84,6 +94,112 @@ class DocProfesorController extends RestController
     protected function findModel($id)
     {
         if (($model = DocProfesor::findOne($id)) !== null) {
+            return $model;
+        } else {
+            Yii::$app->api->sendFailedResponse("El Registro requerido no existe");
+        }
+    }
+
+    // Especialidad - Profesor
+    public  function actionEspecialidades($id)
+    {
+        $model = $this->findModel($id);
+        $grupos = $model->getEspecialidads()->asArray(true)->all();
+        Yii::$app->api->sendSuccessResponse($grupos);
+    }
+
+    public function actionUnsolicitedEspecialidades($id)
+    {
+        $model = $this->findModel($id);
+        $profEsp = $model->getEspecialidads()->asArray(true)->all();
+        $especialidades = DocEspecialidad::find()->asArray(true)->all();
+
+        $unsEsp = [];
+        foreach ($especialidades as $especialidad) {
+            if (!in_array($especialidad, $profEsp)) {
+                $unsEsp[] = $especialidad;
+            }
+        }
+
+        Yii::$app->api->sendSuccessResponse($unsEsp);
+    }
+
+    public function actionCreateEspecialidad()
+    {
+        $model = new DocProfesorHasDocEspecialidad();
+        $model->attributes = $this->request;
+
+        if ($model->save()) {
+            Yii::$app->api->sendSuccessResponse($model->attributes);
+        } else {
+            Yii::$app->api->sendFailedResponse($model->errors);
+        }
+    }    
+
+    public function actionDeleteEspecialidad($idprofesor, $idespecialidad)
+    {
+        $model = $this->findModelEspecialidad($idprofesor, $idespecialidad);
+        $model->delete();
+        Yii::$app->api->sendSuccessResponse($model->attributes);
+    }
+
+    protected function findModelEspecialidad($idProfesor, $idespecialidad)
+    {
+        $model = DocProfesorHasDocEspecialidad::find()->where(['IdProfesor' => $idProfesor])->andWhere(['IdEspecialidad' => $idespecialidad])->one();
+        if ($model !== null) {
+            return $model;
+        } else {
+            Yii::$app->api->sendFailedResponse("El Registro requerido no existe");
+        }
+    }
+
+    // Grupos - Profesor
+    public  function actionGrupos($id)
+    {
+        $model = $this->findModel($id);
+        $grupos = $model->getGrupos()->asArray(true)->all();
+        Yii::$app->api->sendSuccessResponse($grupos);
+    }
+
+    public function actionUnsolicitedGroups($id)
+    {
+        $model = $this->findModel($id);
+        $profGrupos = $model->getGrupos()->asArray(true)->all();
+        $groups = DocGrupo::find()->asArray(true)->all();
+
+        $unsGroup = [];
+        foreach ($groups as $grupo) {
+            if (!in_array($grupo, $profGrupos)) {
+                $unsGroup[] = $grupo;
+            }
+        }
+
+        Yii::$app->api->sendSuccessResponse($unsGroup);
+    }
+
+    public function actionCreateGrupo()
+    {
+        $model = new DocProfesorHasDocGrupo;
+        $model->attributes = $this->request;
+
+        if ($model->save()) {
+            Yii::$app->api->sendSuccessResponse($model->attributes);
+        } else {
+            Yii::$app->api->sendFailedResponse($model->errors);
+        }
+    }    
+
+    public function actionDeleteGrupo($idprofesor, $idgrupo)
+    {
+        $model = $this->findModelGrupo($idprofesor, $idgrupo);
+        $model->delete();
+        Yii::$app->api->sendSuccessResponse($model->attributes);
+    }
+
+    protected function findModelGrupo($idProfesor, $idgrupo)
+    {
+        $model = DocProfesorHasDocGrupo::find()->where(['IdProfesor' => $idProfesor])->andWhere(['IdGrupo' => $idgrupo])->one();
+        if ($model !== null) {
             return $model;
         } else {
             Yii::$app->api->sendFailedResponse("El Registro requerido no existe");

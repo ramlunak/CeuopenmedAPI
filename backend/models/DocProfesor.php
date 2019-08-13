@@ -10,12 +10,14 @@ use \yii\db\ActiveRecord;
  *
  * @property int $IdProfesor
  * @property int $IdPersona
- * @property int $IdEspecialidad
  *
+ * @property Asociacion[] $asociacions
  * @property AdmPersona $persona
- * @property DocEspecialidad $especialidad
+ * @property DocProfesorHasDocEspecialidad[] $docProfesorHasDocEspecialidads
+ * @property DocEspecialidad[] $especialidads
  * @property DocProfesorHasDocGrupo[] $docProfesorHasDocGrupos
  * @property DocGrupo[] $grupos
+ * @property Entidad[] $entidads
  */
 class DocProfesor extends ActiveRecord
 {
@@ -33,12 +35,12 @@ class DocProfesor extends ActiveRecord
     public function rules()
     {
         return [
-            [['IdPersona', 'IdEspecialidad'], 'required'],
-            [['IdPersona', 'IdEspecialidad'], 'integer'],
-            [['IdPersona'], 'exist', 'skipOnError' => true, 'targetClass' => AdmPersona::className(), 'targetAttribute' => ['IdPersona' => 'IdPersona'], 
-                            'message' => 'La persona que seleccionó no existe en la Base de Datos del Sistema.'],
-            [['IdEspecialidad'], 'exist', 'skipOnError' => true, 'targetClass' => DocEspecialidad::className(), 'targetAttribute' => ['IdEspecialidad' => 'IdEspecialidad'],
-                            'message' => 'La especialidad que seleccionó no existe en la Base de Datos del Sistema.'],
+            [['IdPersona'], 'required'],
+            [['IdPersona'], 'integer'],
+            [
+                ['IdPersona'], 'exist', 'skipOnError' => true, 'targetClass' => AdmPersona::className(), 'targetAttribute' => ['IdPersona' => 'IdPersona'],
+                'message' => 'La persona que seleccionó no existe en la Base de Datos del Sistema.'
+            ],
         ];
     }
 
@@ -50,8 +52,15 @@ class DocProfesor extends ActiveRecord
         return [
             'IdProfesor' => 'Id Profesor',
             'IdPersona' => 'Id Persona',
-            'IdEspecialidad' => 'Id Especialidad',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAsociacions()
+    {
+        return $this->hasMany(Asociacion::className(), ['IdProfesor' => 'IdProfesor']);
     }
 
     /**
@@ -65,9 +74,17 @@ class DocProfesor extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEspecialidad()
+    public function getDocProfesorHasDocEspecialidads()
     {
-        return $this->hasOne(DocEspecialidad::className(), ['IdEspecialidad' => 'IdEspecialidad']);
+        return $this->hasMany(DocProfesorHasDocEspecialidad::className(), ['IdProfesor' => 'IdProfesor']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEspecialidads()
+    {
+        return $this->hasMany(DocEspecialidad::className(), ['IdEspecialidad' => 'IdEspecialidad'])->viaTable('doc_profesor_has_doc_especialidad', ['IdProfesor' => 'IdProfesor']);
     }
 
     /**
@@ -86,31 +103,42 @@ class DocProfesor extends ActiveRecord
         return $this->hasMany(DocGrupo::className(), ['IdGrupo' => 'IdGrupo'])->viaTable('doc_profesor_has_doc_grupo', ['IdProfesor' => 'IdProfesor']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEntidads()
+    {
+        return $this->hasMany(Entidad::className(), ['IdProfesor' => 'IdProfesor']);
+    }
+
     static public function search($params)
-    {        
+    {
         $order = Yii::$app->getRequest()->getQueryParam('order');
 
         $search = Yii::$app->getRequest()->getQueryParam('search');
 
-        if(isset($search)){
-            $params=$search;
+        if (isset($search)) {
+            $params = $search;
         }
-        
-        $query = DocProfesor::find()
-            ->select(['IdEspecialidad', 'Especialidad'])
-            ->asArray(true);            
 
-        if(isset($params['IdProfesor'])) {
+        $query = DocProfesor::find()
+            ->select(['{{doc_profesor}}.*', "CONCAT(
+                PrimerNombre, ' ', IFNULL(SegundoNombre, ''), ' ', 
+                ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto"])
+            ->leftJoin('adm_persona', '`doc_profesor`.`IdPersona` = `adm_persona`.`IdPersona`')
+            ->asArray(true);
+
+        if (isset($params['IdProfesor'])) {
             $query->andFilterWhere(['IdProfesor' => $params['IdProfesor']]);
         }
-        if(isset($params['IdPersona'])) {
+        if (isset($params['IdPersona'])) {
             $query->andFilterWhere(['IdPersona' => $params['IdPersona']]);
         }
-        if(isset($params['IdEspecialidad'])) {
+        if (isset($params['IdEspecialidad'])) {
             $query->andFilterWhere(['IdEspecialidad' => $params['IdEspecialidad']]);
-        }        
+        }
 
-        if(isset($order)){
+        if (isset($order)) {
             $query->orderBy($order);
         }
 
@@ -118,7 +146,7 @@ class DocProfesor extends ActiveRecord
         $additional_info = [
             'page' => 'No Define',
             'size' => 'No Define',
-            'totalCount' => (int)$query->count()
+            'totalCount' => (int) $query->count()
         ];
 
         return [

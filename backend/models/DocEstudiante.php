@@ -12,8 +12,11 @@ use \yii\db\ActiveRecord;
  * @property int $IdPersona
  * @property int $IdGrupo
  *
+ * @property Asociacion[] $asociacions
  * @property AdmPersona $persona
  * @property DocGrupo $grupo
+ * @property Entidad[] $entidads
+ * @property TipoEntidad[] $tipoEntidads
  */
 class DocEstudiante extends ActiveRecord
 {
@@ -33,8 +36,14 @@ class DocEstudiante extends ActiveRecord
         return [
             [['IdPersona', 'IdGrupo'], 'required'],
             [['IdPersona', 'IdGrupo'], 'integer'],
-            [['IdPersona'], 'exist', 'skipOnError' => true, 'targetClass' => AdmPersona::className(), 'targetAttribute' => ['IdPersona' => 'IdPersona']],
-            [['IdGrupo'], 'exist', 'skipOnError' => true, 'targetClass' => DocGrupo::className(), 'targetAttribute' => ['IdGrupo' => 'IdGrupo']],
+            [
+                ['IdPersona'], 'exist', 'skipOnError' => true, 'targetClass' => AdmPersona::className(),
+                'targetAttribute' => ['IdPersona' => 'IdPersona'], 'message' => 'La persona que seleccionó no existe en la Base de Datos del Sistema.'
+            ],
+            [
+                ['IdGrupo'], 'exist', 'skipOnError' => true, 'targetClass' => DocGrupo::className(),
+                'targetAttribute' => ['IdGrupo' => 'IdGrupo'], 'message' => 'El grupo que seleccionó no existe en la Base de Datos del Sistema.'
+            ],
         ];
     }
 
@@ -53,6 +62,14 @@ class DocEstudiante extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getAsociacions()
+    {
+        return $this->hasMany(Asociacion::className(), ['IdEstudiante' => 'IdEstudiante']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getPersona()
     {
         return $this->hasOne(AdmPersona::className(), ['IdPersona' => 'IdPersona']);
@@ -66,31 +83,53 @@ class DocEstudiante extends ActiveRecord
         return $this->hasOne(DocGrupo::className(), ['IdGrupo' => 'IdGrupo']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEntidads()
+    {
+        return $this->hasMany(Entidad::className(), ['IdEstudiante' => 'IdEstudiante']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTipoEntidads()
+    {
+        return $this->hasMany(TipoEntidad::className(), ['IdEstudiante' => 'IdEstudiante']);
+    }
+
     static public function search($params)
-    {        
+    {
         $order = Yii::$app->getRequest()->getQueryParam('order');
 
         $search = Yii::$app->getRequest()->getQueryParam('search');
 
-        if(isset($search)){
-            $params=$search;
-        }
-        
-        $query = DocEstudiante::find()
-            ->select(['IdEstudiante', 'IdPersona', 'IdGrupo'])
-            ->asArray(true);            
+        $order = isset($order) ? $order : 'Grupo ASC, NombreCompleto ASC';
 
-        if(isset($params['IdEstudiante'])) {
+        if (isset($search)) {
+            $params = $search;
+        }
+
+        $query = DocEstudiante::find()
+            ->select(['{{doc_estudiante}}.*', "CONCAT(
+                PrimerNombre, ' ', IFNULL(SegundoNombre, ''), ' ', 
+                ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto", 'Grupo'])
+            ->leftJoin('adm_persona', '`doc_estudiante`.`IdPersona` = `adm_persona`.`IdPersona`')
+            ->leftJoin('doc_grupo', '`doc_estudiante`.`IdGrupo` = `doc_grupo`.`IdGrupo`')
+            ->asArray(true);
+
+        if (isset($params['IdEstudiante'])) {
             $query->andFilterWhere(['IdEstudiante' => $params['IdEstudiante']]);
         }
-        if(isset($params['IdPersona'])) {
+        if (isset($params['IdPersona'])) {
             $query->andFilterWhere(['IdPersona' => $params['IdPersona']]);
         }
-        if(isset($params['IdGrupo'])) {
+        if (isset($params['IdGrupo'])) {
             $query->andFilterWhere(['IdGrupo' => $params['IdGrupo']]);
-        }        
+        }
 
-        if(isset($order)){
+        if (isset($order)) {
             $query->orderBy($order);
         }
 
@@ -98,7 +137,7 @@ class DocEstudiante extends ActiveRecord
         $additional_info = [
             'page' => 'No Define',
             'size' => 'No Define',
-            'totalCount' => (int)$query->count()
+            'totalCount' => (int) $query->count()
         ];
 
         return [

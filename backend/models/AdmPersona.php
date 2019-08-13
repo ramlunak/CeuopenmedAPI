@@ -55,6 +55,22 @@ class AdmPersona extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getDocEstudiantes()
+    {
+        return $this->hasMany(DocEstudiante::className(), ['IdPersona' => 'IdPersona']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDocProfesors()
+    {
+        return $this->hasMany(DocProfesor::className(), ['IdPersona' => 'IdPersona']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getSegUsuarios()
     {
         return $this->hasMany(User::className(), ['IdPersona' => 'IdPersona']);

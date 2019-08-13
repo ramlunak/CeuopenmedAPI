@@ -43,6 +43,7 @@ git clone -b master https://github.com/sirinibin/yii2-rest.git
 
 Step3: cd yii2-rest
 Step4:composer install
+composer global require "fxp/composer-asset-plugin:^1.4.5"
 Step5: ./init
 Step6: vim common/config/main-local.php
 change db information

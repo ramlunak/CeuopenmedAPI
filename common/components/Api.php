@@ -1,4 +1,5 @@
 <?php
+
 namespace common\components;
 
 use Yii;
@@ -25,7 +26,7 @@ class Api extends Component
         Yii::$app->end();
     }
 
-    public function sendSuccessResponse($data = false,$additional_info = false)
+    public function sendSuccessResponse($data = false, $additional_info = null)
     {
 
         $this->setHeader(200);
@@ -36,7 +37,7 @@ class Api extends Component
         if (is_array($data))
             $response['data'] = $data;
 
-        if ($additional_info) {
+        if (!is_null($additional_info)) {
             $response = array_merge($response, $additional_info);
         }
 
@@ -70,8 +71,6 @@ class Api extends Component
         header('Content-type: ' . $content_type);
         header('X-Powered-By: ' . "Your Company <www.mywebsite.com>");
         header('Access-Control-Allow-Origin:*');
-
-
     }
 
     protected function _getStatusCodeMessage($status)
@@ -80,8 +79,8 @@ class Api extends Component
         // via parse_ini_file()... however, this will suffice
         // for an example
         $codes = parse_ini_file("HttpStatusCodeMessage.ini");
-        if ( !$codes ) {
-            $codes = Array(
+        if (!$codes) {
+            $codes = array(
                 200 => 'OK',
                 400 => 'Bad Request',
                 401 => 'Unauthorized',
@@ -92,7 +91,7 @@ class Api extends Component
                 501 => 'Not Implemented',
             );
         }
-                
+
         return (isset($codes[$status])) ? $codes[$status] : '';
     }
 
@@ -120,7 +119,6 @@ class Api extends Component
         $model->save(false);
 
         return ($model);
-
     }
 
     public function createAccesstoken($authorization_code)
@@ -147,7 +145,6 @@ class Api extends Component
         $model->save(false);
 
         return ($model);
-
     }
 
     public function refreshAccesstoken($token)
@@ -163,5 +160,4 @@ class Api extends Component
             Yii::$app->api->sendFailedResponse("Token de Acceso inválido.");
         }
     }
-
 }

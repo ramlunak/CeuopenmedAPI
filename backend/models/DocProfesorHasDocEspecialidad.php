@@ -3,25 +3,24 @@
 namespace app\models;
 
 use Yii;
-use \yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "doc_profesor_has_doc_grupo".
+ * This is the model class for table "doc_profesor_has_doc_especialidad".
  *
  * @property int $IdProfesor
- * @property int $IdGrupo
+ * @property int $IdEspecialidad
  *
- * @property DocGrupo $grupo
+ * @property DocEspecialidad $especialidad
  * @property DocProfesor $profesor
  */
-class DocProfesorHasDocGrupo extends ActiveRecord
+class DocProfesorHasDocEspecialidad extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'doc_profesor_has_doc_grupo';
+        return 'doc_profesor_has_doc_especialidad';
     }
 
     /**
@@ -30,12 +29,12 @@ class DocProfesorHasDocGrupo extends ActiveRecord
     public function rules()
     {
         return [
-            [['IdProfesor', 'IdGrupo'], 'required'],
-            [['IdProfesor', 'IdGrupo'], 'integer'],
-            [['IdProfesor', 'IdGrupo'], 'unique', 'targetAttribute' => ['IdProfesor', 'IdGrupo']],
+            [['IdProfesor', 'IdEspecialidad'], 'required'],
+            [['IdProfesor', 'IdEspecialidad'], 'integer'],
+            [['IdProfesor', 'IdEspecialidad'], 'unique', 'targetAttribute' => ['IdProfesor', 'IdEspecialidad']],
             [
-                ['IdGrupo'], 'exist', 'skipOnError' => true, 'targetClass' => DocGrupo::className(),
-                'targetAttribute' => ['IdGrupo' => 'IdGrupo'], 'message' => 'El grupo que seleccionó no existe en la Base de Datos del Sistema.'
+                ['IdEspecialidad'], 'exist', 'skipOnError' => true, 'targetClass' => DocEspecialidad::className(),
+                'targetAttribute' => ['IdEspecialidad' => 'IdEspecialidad'], 'message' => 'La especialidad que seleccionó no existe en la Base de Datos del Sistema.'
             ],
             [
                 ['IdProfesor'], 'exist', 'skipOnError' => true, 'targetClass' => DocProfesor::className(),
@@ -51,16 +50,16 @@ class DocProfesorHasDocGrupo extends ActiveRecord
     {
         return [
             'IdProfesor' => 'Id Profesor',
-            'IdGrupo' => 'Id Grupo',
+            'IdEspecialidad' => 'Id Especialidad',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getGrupo()
+    public function getEspecialidad()
     {
-        return $this->hasOne(DocGrupo::className(), ['IdGrupo' => 'IdGrupo']);
+        return $this->hasOne(DocEspecialidad::className(), ['IdEspecialidad' => 'IdEspecialidad']);
     }
 
     /**
