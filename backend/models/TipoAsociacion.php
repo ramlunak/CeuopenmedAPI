@@ -95,7 +95,13 @@ class TipoAsociacion extends \yii\db\ActiveRecord
 
 
         $query = TipoAsociacion::find()
-            ->select(['IdTipoAsociacion', 'IdEntidad1', 'IdEntidad2', 'TipoAsociacion'])
+            ->select([
+                '{{tipo_asociacion}}.*',
+                'ent1.Entidad AS Entidad1',
+                'ent2.Entidad AS Entidad2'
+            ])
+            ->leftJoin('entidad AS ent1', '`tipo_asociacion`.`IdEntidad1` = `ent1`.`IdEntidad`')
+            ->leftJoin('entidad AS ent2', '`tipo_asociacion`.`IdEntidad2` = `ent2`.`IdEntidad`')
             ->asArray(true);
 
 

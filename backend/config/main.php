@@ -66,6 +66,12 @@ return [
                 'seg-rol/update/<id>'=>'seg-rol/update',
                 'seg-rol/delete/<id>'=>'seg-rol/delete',
 
+                // Seg_Usuario
+                'seg-usuario'=>'seg-usuario/index',
+                'seg-usuario/view/<id>'=>'seg-usuario/view',
+                'seg-usuario/update/<id>'=>'seg-usuario/update',
+                'seg-usuario/delete/<id>'=>'seg-usuario/delete',
+
                 // Adm_Persona
                 'adm-persona'=>'adm-persona/index',
                 'adm-persona/view/<id>'=>'adm-persona/view',
@@ -117,6 +123,13 @@ return [
                 'idioma/create'=>'idioma/create',
                 'idioma/update/<id>'=>'idioma/update',
                 'idioma/delete/<id>'=>'idioma/delete',
+
+                 // Idioma
+                 'plantilla'=>'plantilla/index',
+                 'plantilla/view/<id>'=>'plantilla/view',
+                 'plantilla/create'=>'plantilla/create',
+                 'plantilla/update/<id>'=>'plantilla/update',
+                 'plantilla/delete/<id>'=>'plantilla/delete',
 
                 // Tipo_Entidad
                 'tipo-entidad'=>'tipo-entidad/index',

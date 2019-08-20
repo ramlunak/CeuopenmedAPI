@@ -132,7 +132,22 @@ class Asociacion extends \yii\db\ActiveRecord
 
 
         $query = Asociacion::find()
-            ->select(['IdAsociacion', 'IdEntidad1', 'IdEntidad2', 'IdTipoAsociacion', 'IdEstudiante', 'IdProfesor', 'Evaluacion', 'Estado'])
+            ->select([
+                '{{asociacion}}.*', "CONCAT(est.PrimerNombre, ' ', IFNULL(est.SegundoNombre, ''), 
+                ' ', est.ApellidoPaterno, ' ', est.ApellidoMaterno) AS Estudiante",
+                "CONCAT(prof.PrimerNombre, ' ', IFNULL(prof.SegundoNombre, ''), 
+                ' ', prof.ApellidoPaterno, ' ', prof.ApellidoMaterno) AS Profesor",
+                'ent1.Entidad AS Entidad1',
+                'ent2.Entidad AS Entidad2',
+                'TipoAsociacion'
+            ])
+            ->leftJoin('entidad AS ent1', '`asociacion`.`IdEntidad1` = `ent1`.`IdEntidad`')
+            ->leftJoin('entidad AS ent2', '`asociacion`.`IdEntidad2` = `ent2`.`IdEntidad`')
+            ->leftJoin('tipo_asociacion', '`asociacion`.`IdTipoAsociacion` = `tipo_asociacion`.`IdTipoAsociacion`')
+            ->leftJoin('doc_estudiante', '`asociacion`.`IdEstudiante` = `doc_estudiante`.`IdEstudiante`')
+            ->leftJoin('adm_persona AS est', '`doc_estudiante`.`IdPersona` = `est`.`IdPersona`')
+            ->leftJoin('doc_profesor', '`asociacion`.`IdProfesor` = `doc_profesor`.`IdProfesor`')
+            ->leftJoin('adm_persona AS prof', '`doc_profesor`.`IdPersona` = `prof`.`IdPersona`')
             ->asArray(true);
 
 
@@ -153,12 +168,15 @@ class Asociacion extends \yii\db\ActiveRecord
         }
         if (isset($params['IdProfesor'])) {
             $query->andFilterWhere(['IdProfesor' => $params['IdProfesor']]);
-        }        
+        }
         if (isset($params['Evaluacion'])) {
             $query->andFilterWhere(['Evaluacion' => $params['Evaluacion']]);
         }
         if (isset($params['Estado'])) {
             $query->andFilterWhere(['Estado' => $params['Estado']]);
+        }
+        if (isset($params['Comentario'])) {
+            $query->andFilterWhere(['like', 'Comentario', $params['Comentario']]);
         }
 
 

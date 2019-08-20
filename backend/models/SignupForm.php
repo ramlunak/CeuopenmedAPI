@@ -81,7 +81,6 @@ class SignupForm extends Model
         $user->generateAuthKey();        
         $user->IdRol = $this->IdRol;
         $user->IdPersona = $this->IdPersona;
-        $sdd = $this->IdRol;
         if ( $user->insert() ) {
 
             $data=$user->attributes;

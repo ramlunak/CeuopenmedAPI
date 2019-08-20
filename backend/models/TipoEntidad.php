@@ -10,6 +10,7 @@ use Yii;
  * @property int $IdTipoEntidad
  * @property int $IdIdioma
  * @property int $IdEstudiante
+ * @property string $TipoEntidad
  *
  * @property Entidad[] $entidads
  * @property DocEstudiante $estudiante
@@ -31,8 +32,9 @@ class TipoEntidad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['IdIdioma', 'IdEstudiante'], 'required'],
+            [['IdIdioma', 'IdEstudiante', 'TipoEntidad'], 'required'],
             [['IdIdioma', 'IdEstudiante'], 'integer'],
+            [['TipoEntidad'], 'string', 'max' => 100],
             [
                 ['IdEstudiante'], 'exist', 'skipOnError' => true, 'targetClass' => DocEstudiante::className(),
                 'targetAttribute' => ['IdEstudiante' => 'IdEstudiante'], 'message' => 'El estudiante que seleccionó no existe en la Base de Datos del Sistema.'
@@ -53,6 +55,7 @@ class TipoEntidad extends \yii\db\ActiveRecord
             'IdTipoEntidad' => 'Id Tipo Entidad',
             'IdIdioma' => 'Id Idioma',
             'IdEstudiante' => 'Id Estudiante',
+            'TipoEntidad' => 'Tipo de Entidad',
         ];
     }
 
@@ -92,7 +95,12 @@ class TipoEntidad extends \yii\db\ActiveRecord
 
 
         $query = TipoEntidad::find()
-            ->select(['IdTipoEntidad', 'IdIdioma', 'IdEstudiante'])
+            ->select(['{{tipo_entidad}}.*', "CONCAT(
+                PrimerNombre, ' ', IFNULL(SegundoNombre, ''), ' ', 
+                ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto", 'Idioma'])
+            ->leftJoin('idioma', '`tipo_entidad`.`IdIdioma` = `idioma`.`IdIdioma`')
+            ->leftJoin('doc_estudiante', '`tipo_entidad`.`IdEstudiante` = `doc_estudiante`.`IdEstudiante`')
+            ->leftJoin('adm_persona', '`doc_estudiante`.`IdPersona` = `adm_persona`.`IdPersona`')
             ->asArray(true);
 
 
@@ -104,6 +112,9 @@ class TipoEntidad extends \yii\db\ActiveRecord
         }
         if (isset($params['IdEstudiante'])) {
             $query->andFilterWhere(['IdEstudiante' => $params['IdEstudiante']]);
+        }
+        if (isset($params['TipoEntidad'])) {
+            $query->andFilterWhere(['like', 'TipoEntidad', $params['TipoEntidad']]);
         }
 
 

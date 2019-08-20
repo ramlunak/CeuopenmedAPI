@@ -78,9 +78,7 @@ class DocProfesorController extends RestController
         $persona = $model->getPersona()->select(["CONCAT(
             PrimerNombre, ' ', IFNULL(SegundoNombre, ''), ' ', 
             ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto"])->asArray(true)->one();
-        $response = array_merge($model->attributes, $persona);
-        $especialidad = $model->getEspecialidad()->select(["Especialidad"])->asArray(true)->one();
-        $response = array_merge($response, $especialidad);
+        $response = array_merge($model->attributes, $persona);        
         Yii::$app->api->sendSuccessResponse($response);
     }
 

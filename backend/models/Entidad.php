@@ -156,7 +156,20 @@ class Entidad extends \yii\db\ActiveRecord
 
 
         $query = Entidad::find()
-            ->select(['IdEntidad', 'IdTipoEntidad', 'IdIdioma', 'IdEstudiante', 'IdProfesor', 'Entidad', 'Evaluacion', 'Estado'])
+            ->select([
+                '{{entidad}}.*', "CONCAT(est.PrimerNombre, ' ', IFNULL(est.SegundoNombre, ''), 
+                ' ', est.ApellidoPaterno, ' ', est.ApellidoMaterno) AS Estudiante",
+                "CONCAT(prof.PrimerNombre, ' ', IFNULL(prof.SegundoNombre, ''), 
+                ' ', prof.ApellidoPaterno, ' ', prof.ApellidoMaterno) AS Profesor",
+                'TipoEntidad',
+                'Idioma'
+            ])
+            ->leftJoin('tipo_entidad', '`entidad`.`IdTipoEntidad` = `tipo_entidad`.`IdTipoEntidad`')
+            ->leftJoin('idioma', '`entidad`.`IdIdioma` = `idioma`.`IdIdioma`')
+            ->leftJoin('doc_estudiante', '`entidad`.`IdEstudiante` = `doc_estudiante`.`IdEstudiante`')
+            ->leftJoin('adm_persona AS est', '`doc_estudiante`.`IdPersona` = `est`.`IdPersona`')
+            ->leftJoin('doc_profesor', '`entidad`.`IdProfesor` = `doc_profesor`.`IdProfesor`')
+            ->leftJoin('adm_persona AS prof', '`doc_profesor`.`IdPersona` = `prof`.`IdPersona`')
             ->asArray(true);
 
 
@@ -174,7 +187,7 @@ class Entidad extends \yii\db\ActiveRecord
         }
         if (isset($params['IdProfesor'])) {
             $query->andFilterWhere(['IdProfesor' => $params['IdProfesor']]);
-        }        
+        }
         if (isset($params['Entidad'])) {
             $query->andFilterWhere(['like', 'Entidad', $params['Entidad']]);
         }
@@ -183,6 +196,9 @@ class Entidad extends \yii\db\ActiveRecord
         }
         if (isset($params['Estado'])) {
             $query->andFilterWhere(['Estado' => $params['Estado']]);
+        }
+        if (isset($params['Comentario'])) {
+            $query->andFilterWhere(['like', 'Comentario', $params['Comentario']]);
         }
 
 
