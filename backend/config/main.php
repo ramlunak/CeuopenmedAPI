@@ -45,9 +45,9 @@ return [
                 ],
             ],
         ],
-        'errorHandler' => [
+        /*'errorHandler' => [
             'errorAction' => 'site/error',
-        ],
+        ],*/
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
             'enablePrettyUrl' => true,
@@ -59,18 +59,15 @@ return [
                 'me'=>'site/me',
                 'logout'=>'site/logout',
 
+                // Funciones Adicionales del SiteController
+                'view-user'=>'site/view-user',
+
                 // Seg_Rol
                 'seg-rol'=>'seg-rol/index',
                 'seg-rol/view/<id>'=>'seg-rol/view',
                 'seg-rol/create'=>'seg-rol/create',
                 'seg-rol/update/<id>'=>'seg-rol/update',
                 'seg-rol/delete/<id>'=>'seg-rol/delete',
-
-                // Seg_Usuario
-                'seg-usuario'=>'seg-usuario/index',
-                'seg-usuario/view/<id>'=>'seg-usuario/view',
-                'seg-usuario/update/<id>'=>'seg-usuario/update',
-                'seg-usuario/delete/<id>'=>'seg-usuario/delete',
 
                 // Adm_Persona
                 'adm-persona'=>'adm-persona/index',

@@ -1,4 +1,5 @@
 <?php
+
 namespace backend\controllers;
 
 use Yii;
@@ -7,6 +8,9 @@ use common\models\AuthorizationCodes;
 use common\models\AccessTokens;
 
 use backend\models\SignupForm;
+use backend\models\SegUsuario;
+use app\models\DocEstudiante;
+use app\models\DocProfesor;
 use backend\behaviours\Verbcheck;
 use backend\behaviours\Apiauth;
 
@@ -24,10 +28,10 @@ class SiteController extends RestController
         $behaviors = parent::behaviors();
 
         return $behaviors + [
-            'apiauth' => [// el codigo que valida una peticion api es este de la clase Apiauth es el que verifica el token
+            'apiauth' => [ // el codigo que valida una peticion api es este de la clase Apiauth es el que verifica el token
                 'class' => Apiauth::className(),
-            'exclude' => ['authorize', 'accesstoken','index', /*'register'*/],
-            ],            
+                'exclude' => ['authorize', 'accesstoken', 'index', /*'register'*/],
+            ],
             'verbs' => [
                 'class' => Verbcheck::className(),
                 'actions' => [
@@ -36,6 +40,7 @@ class SiteController extends RestController
                     'register' => ['POST'],
                     'accesstoken' => ['POST'],
                     'me' => ['GET'],
+                    'view-user' => ['POST'],
                 ],
             ],
         ];
@@ -71,7 +76,6 @@ class SiteController extends RestController
         $model = new SignupForm();
         $model->attributes = $this->request;
         $user = $model->signup();
-
     }
 
 
@@ -82,8 +86,18 @@ class SiteController extends RestController
 
         $rol = $data->rol;
         $data = $data->attributes;
-        $data['NombreCompleto'] = $persona->PrimerNombre.' '.$persona->SegundoNombre.' '.$persona->ApellidoPaterno.' '.$persona->ApellidoMaterno;
+        $data['NombreCompleto'] = $persona->PrimerNombre . ' ' . $persona->SegundoNombre . ' ' . $persona->ApellidoPaterno . ' ' . $persona->ApellidoMaterno;
         $data['Rol'] = $rol->Rol;
+        $tempData = DocEstudiante::findOne(['IdPersona' => $persona->IdPersona]);
+        if ($tempData) {
+            $data['IdEstudiante'] = $tempData->IdEstudiante;
+        } else {
+            $tempData = DocProfesor::findOne(['IdPersona' => $persona->IdPersona]);
+            if ($tempData) {
+                $data['IdProfesor'] = $tempData->IdProfesor;
+            }
+        }
+
         unset($data['auth_key']);
         unset($data['password_hash']);
         unset($data['password_reset_token']);
@@ -139,7 +153,7 @@ class SiteController extends RestController
         $headers = Yii::$app->getRequest()->getHeaders();
         $access_token = $headers->get('x-access-token');
 
-        if(!$access_token){
+        if (!$access_token) {
             $access_token = Yii::$app->getRequest()->getQueryParam('access-token');
         }
 
@@ -148,11 +162,21 @@ class SiteController extends RestController
         if ($model->delete()) {
 
             Yii::$app->api->sendSuccessResponse(["Sección cerrada correctamente"]);
-
         } else {
             Yii::$app->api->sendFailedResponse("Petición inválida");
         }
+    }
 
+    public function actionViewUser()
+    {
+        $model = new SegUsuario();
+        $model->attributes = $this->request;
+        $user = $model->viewUser();
+        if($user){
+            Yii::$app->api->sendSuccessResponse($user);
+        } else {
+            Yii::$app->api->sendFailedResponse($model->errors);
+        }
 
     }
 }

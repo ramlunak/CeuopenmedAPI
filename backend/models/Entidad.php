@@ -48,10 +48,10 @@ class Entidad extends \yii\db\ActiveRecord
                 ['IdEstudiante'], 'exist', 'skipOnError' => true, 'targetClass' => DocEstudiante::className(),
                 'targetAttribute' => ['IdEstudiante' => 'IdEstudiante'], 'message' => 'El estudiante que seleccionó no existe en la Base de Datos del Sistema.'
             ],
-            [
+            /*[
                 ['IdProfesor'], 'exist', 'skipOnError' => true, 'targetClass' => DocProfesor::className(),
                 'targetAttribute' => ['IdProfesor' => 'IdProfesor'], 'message' => 'El profesor que seleccionó no existe en la Base de Datos del Sistema.'
-            ],
+            ],*/
             [
                 ['IdIdioma'], 'exist', 'skipOnError' => true, 'targetClass' => Idioma::className(),
                 'targetAttribute' => ['IdIdioma' => 'IdIdioma'], 'message' => 'El idioma que seleccionó no existe en la Base de Datos del Sistema.'

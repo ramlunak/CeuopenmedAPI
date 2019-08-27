@@ -44,10 +44,10 @@ class Asociacion extends \yii\db\ActiveRecord
                 ['IdEstudiante'], 'exist', 'skipOnError' => true, 'targetClass' => DocEstudiante::className(),
                 'targetAttribute' => ['IdEstudiante' => 'IdEstudiante'], 'message' => 'El estudiante que seleccionó no existe en la Base de Datos del Sistema.'
             ],
-            [
+            /*[
                 ['IdProfesor'], 'exist', 'skipOnError' => true, 'targetClass' => DocProfesor::className(),
                 'targetAttribute' => ['IdProfesor' => 'IdProfesor'], 'message' => 'El profesor que seleccionó no existe en la Base de Datos del Sistema.'
-            ],
+            ],*/
             [
                 ['IdEntidad1'], 'exist', 'skipOnError' => true, 'targetClass' => Entidad::className(),
                 'targetAttribute' => ['IdEntidad1' => 'IdEntidad'], 'message' => 'La entidad que seleccionó no existe en la Base de Datos del Sistema.'

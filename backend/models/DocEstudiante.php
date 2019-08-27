@@ -40,10 +40,10 @@ class DocEstudiante extends ActiveRecord
                 ['IdPersona'], 'exist', 'skipOnError' => true, 'targetClass' => AdmPersona::className(),
                 'targetAttribute' => ['IdPersona' => 'IdPersona'], 'message' => 'La persona que seleccionó no existe en la Base de Datos del Sistema.'
             ],
-            [
+            /*[
                 ['IdGrupo'], 'exist', 'skipOnError' => true, 'targetClass' => DocGrupo::className(),
                 'targetAttribute' => ['IdGrupo' => 'IdGrupo'], 'message' => 'El grupo que seleccionó no existe en la Base de Datos del Sistema.'
-            ],
+            ],*/
         ];
     }
 
@@ -114,8 +114,9 @@ class DocEstudiante extends ActiveRecord
         $query = DocEstudiante::find()
             ->select(['{{doc_estudiante}}.*', "CONCAT(
                 PrimerNombre, ' ', IFNULL(SegundoNombre, ''), ' ', 
-                ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto", 'Grupo'])
+                ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto", 'Grupo', 'username', 'status', 'id'])
             ->leftJoin('adm_persona', '`doc_estudiante`.`IdPersona` = `adm_persona`.`IdPersona`')
+            ->leftJoin('seg_usuario', '`doc_estudiante`.`IdPersona` = `seg_usuario`.`IdPersona`')
             ->leftJoin('doc_grupo', '`doc_estudiante`.`IdGrupo` = `doc_grupo`.`IdGrupo`')
             ->asArray(true);
 

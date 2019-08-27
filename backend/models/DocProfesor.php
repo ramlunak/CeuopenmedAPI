@@ -124,8 +124,9 @@ class DocProfesor extends ActiveRecord
         $query = DocProfesor::find()
             ->select(['{{doc_profesor}}.*', "CONCAT(
                 PrimerNombre, ' ', IFNULL(SegundoNombre, ''), ' ', 
-                ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto"])
-            ->leftJoin('adm_persona', '`doc_profesor`.`IdPersona` = `adm_persona`.`IdPersona`')
+                ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto", 'username', 'status', 'id'])
+            ->leftJoin('adm_persona', '`doc_profesor`.`IdPersona` = `adm_persona`.`IdPersona`')            
+            ->leftJoin('seg_usuario', '`doc_profesor`.`IdPersona` = `seg_usuario`.`IdPersona`')
             ->asArray(true);
 
         if (isset($params['IdProfesor'])) {

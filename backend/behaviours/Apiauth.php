@@ -82,7 +82,7 @@ class Apiauth extends AuthMethod
         }
         if ($accessToken !== null) {
             
-            Yii::$app->api->sendFailedResponse('Invalid Access token', 401);
+            Yii::$app->api->sendFailedResponse('Token de Acceso Inválido', 401);
 
             // $this->handleFailure($response);
         }
@@ -135,7 +135,7 @@ class Apiauth extends AuthMethod
             $this->challenge($response);
             $this->handleFailure($response);
 
-            Yii::$app->api->sendFailedResponse('Invalid Request');
+            Yii::$app->api->sendFailedResponse('Petición Inválida');
             //return false;
         }
     }
@@ -145,7 +145,7 @@ class Apiauth extends AuthMethod
      */
     public function handleFailure($response)
     {        
-        Yii::$app->api->sendFailedResponse('Invalid Access token', 401);
+        Yii::$app->api->sendFailedResponse('Token de Acceso Inválido', 401);
         //throw new UnauthorizedHttpException('You are requesting with an invalid credential.');
     }
 

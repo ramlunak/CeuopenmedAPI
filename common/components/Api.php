@@ -41,7 +41,7 @@ class Api extends Component
             $response = array_merge($response, $additional_info);
         }
 
-        $response = Json::encode($response, JSON_PRETTY_PRINT);
+        $response = json_encode($response);
 
 
         if (isset($_GET['callback'])) {
