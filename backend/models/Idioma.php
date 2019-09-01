@@ -10,7 +10,7 @@ use Yii;
  * @property int $IdIdioma
  * @property string $Idioma
  *
- * @property Entidad[] $entidads
+ * @property DetalleEntidad[] $detalleEntidads
  * @property TipoEntidad[] $tipoEntidads
  */
 class Idioma extends \yii\db\ActiveRecord
@@ -48,9 +48,9 @@ class Idioma extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEntidads()
+    public function getDetalleEntidads()
     {
-        return $this->hasMany(Entidad::className(), ['IdIdioma' => 'IdIdioma']);
+        return $this->hasMany(DetalleEntidad::className(), ['IdIdioma' => 'IdIdioma']);
     }
 
     /**

@@ -40,7 +40,10 @@ class SiteController extends RestController
                     'register' => ['POST'],
                     'accesstoken' => ['POST'],
                     'me' => ['GET'],
-                    'view-user' => ['POST'],
+                    'update-user' => ['PUT'],
+                    'view-user' => ['GET'],
+                    'change-password' => ['PUT'],
+                    'user-name-exist' => ['GET'],
                 ],
             ],
         ];
@@ -167,16 +170,35 @@ class SiteController extends RestController
         }
     }
 
-    public function actionViewUser()
+    public function actionUpdateUser($id)
     {
         $model = new SegUsuario();
         $model->attributes = $this->request;
-        $user = $model->viewUser();
-        if($user){
-            Yii::$app->api->sendSuccessResponse($user);
-        } else {
-            Yii::$app->api->sendFailedResponse($model->errors);
-        }
-
+        $model->id = $id;
+        $model->update();
     }
+
+    public function actionViewUser($id)
+    {
+        $model = new SegUsuario();
+        $model->attributes = $this->request;
+        $model->id = $id;
+        $model->getUsuario();
+    }
+
+    public function actionChangePassword($id)
+    {
+        $model = new SegUsuario();
+        $model->attributes = $this->request;
+        $model->id = $id;
+        $model->changePassword();
+    }
+
+    public function actionUserNameExist($username)
+    {
+        $model = new SegUsuario();
+        $model->username = $username;
+        $model->existUserName();
+    }
+
 }

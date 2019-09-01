@@ -41,20 +41,12 @@ class Entidad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['IdTipoEntidad', 'IdIdioma', 'IdEstudiante', 'IdProfesor', 'Entidad'], 'required'],
-            [['IdTipoEntidad', 'IdIdioma', 'IdEstudiante', 'IdProfesor', 'Evaluacion', 'Estado'], 'integer'],
-            [['Entidad'], 'string', 'max' => 255],
+            [['IdTipoEntidad', 'IdEstudiante'], 'required'],
+            [['IdTipoEntidad', 'IdEstudiante', 'IdProfesor', 'Evaluacion', 'Estado'], 'integer'],
+            [['Comentario'], 'string'],
             [
                 ['IdEstudiante'], 'exist', 'skipOnError' => true, 'targetClass' => DocEstudiante::className(),
                 'targetAttribute' => ['IdEstudiante' => 'IdEstudiante'], 'message' => 'El estudiante que seleccionó no existe en la Base de Datos del Sistema.'
-            ],
-            /*[
-                ['IdProfesor'], 'exist', 'skipOnError' => true, 'targetClass' => DocProfesor::className(),
-                'targetAttribute' => ['IdProfesor' => 'IdProfesor'], 'message' => 'El profesor que seleccionó no existe en la Base de Datos del Sistema.'
-            ],*/
-            [
-                ['IdIdioma'], 'exist', 'skipOnError' => true, 'targetClass' => Idioma::className(),
-                'targetAttribute' => ['IdIdioma' => 'IdIdioma'], 'message' => 'El idioma que seleccionó no existe en la Base de Datos del Sistema.'
             ],
             [
                 ['IdTipoEntidad'], 'exist', 'skipOnError' => true, 'targetClass' => TipoEntidad::className(),
@@ -71,12 +63,11 @@ class Entidad extends \yii\db\ActiveRecord
         return [
             'IdEntidad' => 'Id Entidad',
             'IdTipoEntidad' => 'Id Tipo Entidad',
-            'IdIdioma' => 'Id Idioma',
             'IdEstudiante' => 'Id Estudiante',
             'IdProfesor' => 'Id Profesor',
-            'Entidad' => 'Entidad',
             'Evaluacion' => 'Evaluacion',
             'Estado' => 'Estado',
+            'Comentario' => 'Comentario',
         ];
     }
 
@@ -99,6 +90,14 @@ class Entidad extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getDetalleEntidads()
+    {
+        return $this->hasMany(DetalleEntidad::className(), ['IdEntidad' => 'IdEntidad']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getEstudiante()
     {
         return $this->hasOne(DocEstudiante::className(), ['IdEstudiante' => 'IdEstudiante']);
@@ -110,15 +109,7 @@ class Entidad extends \yii\db\ActiveRecord
     public function getProfesor()
     {
         return $this->hasOne(DocProfesor::className(), ['IdProfesor' => 'IdProfesor']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getIdioma()
-    {
-        return $this->hasOne(Idioma::className(), ['IdIdioma' => 'IdIdioma']);
-    }
+    }    
 
     /**
      * @return \yii\db\ActiveQuery
@@ -161,11 +152,9 @@ class Entidad extends \yii\db\ActiveRecord
                 ' ', est.ApellidoPaterno, ' ', est.ApellidoMaterno) AS Estudiante",
                 "CONCAT(prof.PrimerNombre, ' ', IFNULL(prof.SegundoNombre, ''), 
                 ' ', prof.ApellidoPaterno, ' ', prof.ApellidoMaterno) AS Profesor",
-                'TipoEntidad',
-                'Idioma'
+                'TipoEntidad'
             ])
             ->leftJoin('tipo_entidad', '`entidad`.`IdTipoEntidad` = `tipo_entidad`.`IdTipoEntidad`')
-            ->leftJoin('idioma', '`entidad`.`IdIdioma` = `idioma`.`IdIdioma`')
             ->leftJoin('doc_estudiante', '`entidad`.`IdEstudiante` = `doc_estudiante`.`IdEstudiante`')
             ->leftJoin('adm_persona AS est', '`doc_estudiante`.`IdPersona` = `est`.`IdPersona`')
             ->leftJoin('doc_profesor', '`entidad`.`IdProfesor` = `doc_profesor`.`IdProfesor`')
@@ -178,10 +167,7 @@ class Entidad extends \yii\db\ActiveRecord
         }
         if (isset($params['IdTipoEntidad'])) {
             $query->andFilterWhere(['IdTipoEntidad' => $params['IdTipoEntidad']]);
-        }
-        if (isset($params['IdIdioma'])) {
-            $query->andFilterWhere(['IdIdioma' => $params['IdIdioma']]);
-        }
+        }        
         if (isset($params['IdEstudiante'])) {
             $query->andFilterWhere(['IdEstudiante' => $params['IdEstudiante']]);
         }

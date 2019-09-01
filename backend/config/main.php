@@ -60,7 +60,10 @@ return [
                 'logout'=>'site/logout',
 
                 // Funciones Adicionales del SiteController
-                'view-user'=>'site/view-user',
+                'update-user/<id>'=>'site/update-user',
+                'view-user/<id>'=>'site/view-user',
+                'change-password/<id>'=>'site/change-password',
+                'user-name-exist/<username>'=>'site/user-name-exist',
 
                 // Seg_Rol
                 'seg-rol'=>'seg-rol/index',
@@ -141,6 +144,13 @@ return [
                 'entidad/create'=>'entidad/create',
                 'entidad/update/<id>'=>'entidad/update',
                 'entidad/delete/<id>'=>'entidad/delete',
+
+                // Detalle Entidad
+                'detalle-entidad'=>'detalle-entidad/index',
+                'detalle-entidad/view/<id>'=>'detalle-entidad/view',
+                'detalle-entidad/create'=>'detalle-entidad/create',
+                'detalle-entidad/update/<id>'=>'detalle-entidad/update',
+                'detalle-entidad/delete/<id>'=>'detalle-entidad/delete',
 
                 // Tipo_Asociacion
                 'tipo-asociacion'=>'tipo-asociacion/index',

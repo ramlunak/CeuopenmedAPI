@@ -23,14 +23,13 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            [['username','password','email'],'required'],
+            [['username'],'required'],
             ['username', 'trim'],
             ['username', 'required'],
             ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este Nombre de Usuario ya está en uso.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'trim'],
-            ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Esta Dirección de Email ya está en uso.'],
