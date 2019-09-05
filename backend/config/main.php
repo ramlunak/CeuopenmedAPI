@@ -124,13 +124,6 @@ return [
                 'idioma/update/<id>'=>'idioma/update',
                 'idioma/delete/<id>'=>'idioma/delete',
 
-                 // Idioma
-                 'plantilla'=>'plantilla/index',
-                 'plantilla/view/<id>'=>'plantilla/view',
-                 'plantilla/create'=>'plantilla/create',
-                 'plantilla/update/<id>'=>'plantilla/update',
-                 'plantilla/delete/<id>'=>'plantilla/delete',
-
                 // Tipo_Entidad
                 'tipo-entidad'=>'tipo-entidad/index',
                 'tipo-entidad/view/<id>'=>'tipo-entidad/view',
@@ -141,6 +134,7 @@ return [
                 // Entidad
                 'entidad'=>'entidad/index',
                 'entidad/view/<id>'=>'entidad/view',
+                'entidad/view-detalles/<id>'=>'entidad/view-detalles',
                 'entidad/create'=>'entidad/create',
                 'entidad/update/<id>'=>'entidad/update',
                 'entidad/delete/<id>'=>'entidad/delete',

@@ -9,18 +9,17 @@ use Yii;
  *
  * @property int $IdEntidad
  * @property int $IdTipoEntidad
- * @property int $IdIdioma
  * @property int $IdEstudiante
  * @property int $IdProfesor
- * @property string $Entidad
  * @property int $Evaluacion
  * @property int $Estado
+ * @property string $Comentario
  *
  * @property Asociacion[] $asociacions
  * @property Asociacion[] $asociacions0
+ * @property DetalleEntidad[] $detalleEntidads
  * @property DocEstudiante $estudiante
  * @property DocProfesor $profesor
- * @property Idioma $idioma
  * @property TipoEntidad $tipoEntidad
  * @property TipoAsociacion[] $tipoAsociacions
  * @property TipoAsociacion[] $tipoAsociacions0
@@ -152,9 +151,12 @@ class Entidad extends \yii\db\ActiveRecord
                 ' ', est.ApellidoPaterno, ' ', est.ApellidoMaterno) AS Estudiante",
                 "CONCAT(prof.PrimerNombre, ' ', IFNULL(prof.SegundoNombre, ''), 
                 ' ', prof.ApellidoPaterno, ' ', prof.ApellidoMaterno) AS Profesor",
-                'TipoEntidad'
+                'TipoEntidad', 'IdRecurso', 'detalle_entidad.IdIdioma', 'Entidad', 'Referencia', 'Nivel', 'IsImage', 'Idioma'
             ])
+            ->distinct('IdEntidad')
             ->leftJoin('tipo_entidad', '`entidad`.`IdTipoEntidad` = `tipo_entidad`.`IdTipoEntidad`')
+            ->leftJoin('detalle_entidad', '`entidad`.`IdEntidad` = `detalle_entidad`.`IdEntidad`')
+            ->leftJoin('idioma', '`detalle_entidad`.`IdIdioma` = `idioma`.`IdIdioma`')
             ->leftJoin('doc_estudiante', '`entidad`.`IdEstudiante` = `doc_estudiante`.`IdEstudiante`')
             ->leftJoin('adm_persona AS est', '`doc_estudiante`.`IdPersona` = `est`.`IdPersona`')
             ->leftJoin('doc_profesor', '`entidad`.`IdProfesor` = `doc_profesor`.`IdProfesor`')
