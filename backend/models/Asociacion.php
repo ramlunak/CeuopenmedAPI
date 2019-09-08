@@ -164,13 +164,13 @@ class Asociacion extends \yii\db\ActiveRecord
             $query->andFilterWhere(['IdEntidad2' => $params['IdEntidad2']]);
         }
         if (isset($params['IdTipoAsociacion'])) {
-            $query->andFilterWhere(['IdTipoAsociacion' => $params['IdTipoAsociacion']]);
+            $query->andFilterWhere(['asociacion.IdTipoAsociacion' => $params['IdTipoAsociacion']]);
         }
         if (isset($params['IdEstudiante'])) {
-            $query->andFilterWhere(['IdEstudiante' => $params['IdEstudiante']]);
+            $query->andFilterWhere(['asociacion.IdEstudiante' => $params['IdEstudiante']]);
         }
         if (isset($params['IdProfesor'])) {
-            $query->andFilterWhere(['IdProfesor' => $params['IdProfesor']]);
+            $query->andFilterWhere(['asociacion.IdProfesor' => $params['IdProfesor']]);
         }
         if (isset($params['Evaluacion'])) {
             $query->andFilterWhere(['Evaluacion' => $params['Evaluacion']]);

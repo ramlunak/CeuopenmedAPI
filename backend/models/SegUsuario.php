@@ -4,6 +4,7 @@ namespace backend\models;
 
 use yii\base\Model;
 use common\models\User;
+use common\models\LoginForm;
 use app\models\DocEstudiante;
 use app\models\DocProfesor;
 use Yii;
@@ -15,6 +16,7 @@ class SegUsuario extends Model
 {
     public $id;
     public $username;
+    public $oldpassword;
     public $email;
     public $password;
     public $status;
@@ -141,6 +143,14 @@ class SegUsuario extends Model
                 Yii::$app->api->sendFailedResponse($this->errors);
                 //return null;
             }
+        }
+
+        $verifyUser = new LoginForm();
+        $verifyUser->username = $this->username;
+        $verifyUser->password = $this->oldpassword;
+
+        if (!$verifyUser->validate()) {
+            Yii::$app->api->sendFailedResponse("La contraseña anterior no es correcta.");
         }
 
         $user = User::findOne($this->id);

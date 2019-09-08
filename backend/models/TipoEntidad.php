@@ -13,6 +13,8 @@ use Yii;
  * @property string $TipoEntidad
  *
  * @property Entidad[] $entidads
+ * @property TipoAsociacion[] $tipoAsociacions
+ * @property TipoAsociacion[] $tipoAsociacions0
  * @property DocEstudiante $estudiante
  * @property Idioma $idioma
  */
@@ -70,6 +72,22 @@ class TipoEntidad extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getTipoAsociacions()
+    {
+        return $this->hasMany(TipoAsociacion::className(), ['IdTipoEntidad1' => 'IdTipoEntidad']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTipoAsociacions0()
+    {
+        return $this->hasMany(TipoAsociacion::className(), ['IdTipoEntidad2' => 'IdTipoEntidad']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getEstudiante()
     {
         return $this->hasOne(DocEstudiante::className(), ['IdEstudiante' => 'IdEstudiante']);
@@ -108,10 +126,10 @@ class TipoEntidad extends \yii\db\ActiveRecord
             $query->andFilterWhere(['IdTipoEntidad' => $params['IdTipoEntidad']]);
         }
         if (isset($params['IdIdioma'])) {
-            $query->andFilterWhere(['IdIdioma' => $params['IdIdioma']]);
+            $query->andFilterWhere(['tipo_entidad.IdIdioma' => $params['IdIdioma']]);
         }
         if (isset($params['IdEstudiante'])) {
-            $query->andFilterWhere(['IdEstudiante' => $params['IdEstudiante']]);
+            $query->andFilterWhere(['tipo_entidad.IdEstudiante' => $params['IdEstudiante']]);
         }
         if (isset($params['TipoEntidad'])) {
             $query->andFilterWhere(['like', 'TipoEntidad', $params['TipoEntidad']]);

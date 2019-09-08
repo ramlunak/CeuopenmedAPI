@@ -102,7 +102,7 @@ class DetalleEntidad extends \yii\db\ActiveRecord
             $query->andFilterWhere(['IdRecurso' => $params['IdRecurso']]);
         }
         if (isset($params['IdIdioma'])) {
-            $query->andFilterWhere(['IdIdioma' => $params['IdIdioma']]);
+            $query->andFilterWhere(['detalle_entidad.IdIdioma' => $params['IdIdioma']]);
         }
         if (isset($params['IdEntidad'])) {
             $query->andFilterWhere(['IdEntidad' => $params['IdEntidad']]);

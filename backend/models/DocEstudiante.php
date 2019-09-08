@@ -124,10 +124,10 @@ class DocEstudiante extends ActiveRecord
             $query->andFilterWhere(['IdEstudiante' => $params['IdEstudiante']]);
         }
         if (isset($params['IdPersona'])) {
-            $query->andFilterWhere(['IdPersona' => $params['IdPersona']]);
+            $query->andFilterWhere(['doc_estudiante.IdPersona' => $params['IdPersona']]);
         }
         if (isset($params['IdGrupo'])) {
-            $query->andFilterWhere(['IdGrupo' => $params['IdGrupo']]);
+            $query->andFilterWhere(['doc_estudiante.IdGrupo' => $params['IdGrupo']]);
         }
 
         if (isset($order)) {

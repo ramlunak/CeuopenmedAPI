@@ -133,12 +133,9 @@ class DocProfesor extends ActiveRecord
             $query->andFilterWhere(['IdProfesor' => $params['IdProfesor']]);
         }
         if (isset($params['IdPersona'])) {
-            $query->andFilterWhere(['IdPersona' => $params['IdPersona']]);
+            $query->andFilterWhere(['doc_profesor.IdPersona' => $params['IdPersona']]);
         }
-        if (isset($params['IdEspecialidad'])) {
-            $query->andFilterWhere(['IdEspecialidad' => $params['IdEspecialidad']]);
-        }
-
+        
         if (isset($order)) {
             $query->orderBy($order);
         }

@@ -21,8 +21,6 @@ use Yii;
  * @property DocEstudiante $estudiante
  * @property DocProfesor $profesor
  * @property TipoEntidad $tipoEntidad
- * @property TipoAsociacion[] $tipoAsociacions
- * @property TipoAsociacion[] $tipoAsociacions0
  */
 class Entidad extends \yii\db\ActiveRecord
 {
@@ -117,23 +115,7 @@ class Entidad extends \yii\db\ActiveRecord
     {
         return $this->hasOne(TipoEntidad::className(), ['IdTipoEntidad' => 'IdTipoEntidad']);
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTipoAsociacions()
-    {
-        return $this->hasMany(TipoAsociacion::className(), ['IdEntidad1' => 'IdEntidad']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTipoAsociacions0()
-    {
-        return $this->hasMany(TipoAsociacion::className(), ['IdEntidad2' => 'IdEntidad']);
-    }
-
+        
     static public function search($params)
     {
         $order = Yii::$app->getRequest()->getQueryParam('order');
@@ -165,16 +147,16 @@ class Entidad extends \yii\db\ActiveRecord
 
 
         if (isset($params['IdEntidad'])) {
-            $query->andFilterWhere(['IdEntidad' => $params['IdEntidad']]);
+            $query->andFilterWhere(['entidad.IdEntidad' => $params['IdEntidad']]);
         }
         if (isset($params['IdTipoEntidad'])) {
-            $query->andFilterWhere(['IdTipoEntidad' => $params['IdTipoEntidad']]);
+            $query->andFilterWhere(['entidad.IdTipoEntidad' => $params['IdTipoEntidad']]);
         }        
         if (isset($params['IdEstudiante'])) {
-            $query->andFilterWhere(['IdEstudiante' => $params['IdEstudiante']]);
+            $query->andFilterWhere(['entidad.IdEstudiante' => $params['IdEstudiante']]);
         }
         if (isset($params['IdProfesor'])) {
-            $query->andFilterWhere(['IdProfesor' => $params['IdProfesor']]);
+            $query->andFilterWhere(['entidad.IdProfesor' => $params['IdProfesor']]);
         }
         if (isset($params['Entidad'])) {
             $query->andFilterWhere(['like', 'Entidad', $params['Entidad']]);

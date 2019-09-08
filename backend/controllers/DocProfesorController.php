@@ -34,7 +34,15 @@ class DocProfesorController extends RestController
                     'create' => ['POST'],
                     'update' => ['PUT'],
                     'view' => ['GET'],
-                    'delete' => ['DELETE']
+                    'delete' => ['DELETE'],
+                    'especialidades' => ['GET'],
+                    'unsolicited-especialidades' => ['GET'],
+                    'create-especialidad' => ['POST'],
+                    'delete-especialidad' => ['DELETE'],
+                    'grupos' => ['GET'],
+                    'unsolicited-groups' => ['GET'],
+                    'create-grupo' => ['POST'],
+                    'delete-grupo' => ['DELETE'],
                 ],
             ],
 
@@ -102,8 +110,8 @@ class DocProfesorController extends RestController
     public  function actionEspecialidades($id)
     {
         $model = $this->findModel($id);
-        $grupos = $model->getEspecialidads()->asArray(true)->all();
-        Yii::$app->api->sendSuccessResponse($grupos);
+        $especialidades = $model->getEspecialidads()->asArray(true)->all();
+        Yii::$app->api->sendSuccessResponse($especialidades);
     }
 
     public function actionUnsolicitedEspecialidades($id)

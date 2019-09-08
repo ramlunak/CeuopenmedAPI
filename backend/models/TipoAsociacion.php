@@ -8,13 +8,13 @@ use Yii;
  * This is the model class for table "tipo_asociacion".
  *
  * @property int $IdTipoAsociacion
- * @property int $IdEntidad1
- * @property int $IdEntidad2
+ * @property int $IdTipoEntidad1
+ * @property int $IdTipoEntidad2
  * @property string $TipoAsociacion
  *
  * @property Asociacion[] $asociacions
- * @property Entidad $entidad1
- * @property Entidad $entidad2
+ * @property TipoEntidad $tipoEntidad1
+ * @property TipoEntidad $tipoEntidad2
  */
 class TipoAsociacion extends \yii\db\ActiveRecord
 {
@@ -32,18 +32,18 @@ class TipoAsociacion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['IdEntidad1', 'IdEntidad2', 'TipoAsociacion'], 'required'],
-            [['IdEntidad1', 'IdEntidad2'], 'integer'],
+            [['IdTipoEntidad1', 'IdTipoEntidad2', 'TipoAsociacion'], 'required'],
+            [['IdTipoEntidad1', 'IdTipoEntidad2'], 'integer'],
             [['TipoAsociacion'], 'string', 'max' => 45],
             [
-                ['IdEntidad1'], 'exist', 'skipOnError' => true, 'targetClass' => Entidad::className(),
-                'targetAttribute' => ['IdEntidad1' => 'IdEntidad'], 'message' => 'La entidad que seleccionó no existe en la Base de Datos del Sistema.'
+                ['IdTipoEntidad1'], 'exist', 'skipOnError' => true, 'targetClass' => TipoEntidad::className(),
+                'targetAttribute' => ['IdTipoEntidad1' => 'IdTipoEntidad', 'message' => 'El tipo de entidad que seleccionó no existe en la Base de Datos del Sistema.']
             ],
             [
-                ['IdEntidad2'], 'exist', 'skipOnError' => true, 'targetClass' => Entidad::className(),
-                'targetAttribute' => ['IdEntidad2' => 'IdEntidad'], 'message' => 'La entidad que seleccionó no existe en la Base de Datos del Sistema.'
+                ['IdTipoEntidad2'], 'exist', 'skipOnError' => true, 'targetClass' => TipoEntidad::className(),
+                'targetAttribute' => ['IdTipoEntidad2' => 'IdTipoEntidad', 'message' => 'El tipo de entidad que seleccionó no existe en la Base de Datos del Sistema.']
             ],
-        ];
+        ];        
     }
 
     /**
@@ -53,8 +53,8 @@ class TipoAsociacion extends \yii\db\ActiveRecord
     {
         return [
             'IdTipoAsociacion' => 'Id Tipo Asociacion',
-            'IdEntidad1' => 'Id Entidad1',
-            'IdEntidad2' => 'Id Entidad2',
+            'IdTipoEntidad1' => 'Id Tipo Entidad1',
+            'IdTipoEntidad2' => 'Id Tipo Entidad2',
             'TipoAsociacion' => 'Tipo Asociacion',
         ];
     }
@@ -70,17 +70,17 @@ class TipoAsociacion extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEntidad1()
+    public function getTipoEntidad1()
     {
-        return $this->hasOne(Entidad::className(), ['IdEntidad' => 'IdEntidad1']);
+        return $this->hasOne(TipoEntidad::className(), ['IdTipoEntidad' => 'IdTipoEntidad1']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getEntidad2()
+    public function getTipoEntidad2()
     {
-        return $this->hasOne(Entidad::className(), ['IdEntidad' => 'IdEntidad2']);
+        return $this->hasOne(TipoEntidad::className(), ['IdTipoEntidad' => 'IdTipoEntidad2']);
     }
 
     static public function search($params)
@@ -97,22 +97,22 @@ class TipoAsociacion extends \yii\db\ActiveRecord
         $query = TipoAsociacion::find()
             ->select([
                 '{{tipo_asociacion}}.*',
-                'ent1.Entidad AS Entidad1',
-                'ent2.Entidad AS Entidad2'
+                'tent1.TipoEntidad AS TipoEntidad1',
+                'tent2.TipoEntidad AS TipoEntidad2'
             ])
-            ->leftJoin('entidad AS ent1', '`tipo_asociacion`.`IdEntidad1` = `ent1`.`IdEntidad`')
-            ->leftJoin('entidad AS ent2', '`tipo_asociacion`.`IdEntidad2` = `ent2`.`IdEntidad`')
+            ->leftJoin('tipo_entidad AS tent1', '`tipo_asociacion`.`IdTipoEntidad1` = `tent1`.`IdTipoEntidad`')
+            ->leftJoin('tipo_entidad AS tent2', '`tipo_asociacion`.`IdTipoEntidad2` = `tent2`.`IdTipoEntidad`')
             ->asArray(true);
 
 
         if (isset($params['IdTipoAsociacion'])) {
             $query->andFilterWhere(['IdTipoAsociacion' => $params['IdTipoAsociacion']]);
         }
-        if (isset($params['IdEntidad1'])) {
-            $query->andFilterWhere(['IdEntidad1' => $params['IdEntidad1']]);
+        if (isset($params['IdTipoEntidad1'])) {
+            $query->andFilterWhere(['IdTipoEntidad1' => $params['IdTipoEntidad1']]);
         }
-        if (isset($params['IdEntidad2'])) {
-            $query->andFilterWhere(['IdEntidad2' => $params['IdEntidad2']]);
+        if (isset($params['IdTipoEntidad2'])) {
+            $query->andFilterWhere(['IdTipoEntidad2' => $params['IdTipoEntidad2']]);
         }
         if (isset($params['TipoAsociacion'])) {
             $query->andFilterWhere(['like', 'TipoAsociacion', $params['TipoAsociacion']]);

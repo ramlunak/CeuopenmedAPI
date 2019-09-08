@@ -189,8 +189,11 @@ class SiteController extends RestController
     public function actionChangePassword($id)
     {
         $model = new SegUsuario();
-        $model->attributes = $this->request;
+        // $model->attributes = $this->request;
         $model->id = $id;
+        $model->username = $this->request['uusername'];
+        $model->oldpassword = $this->request['oldpassword'];
+        $model->password = $this->request['upassword'];
         $model->changePassword();
     }
 
