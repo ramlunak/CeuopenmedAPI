@@ -33,6 +33,7 @@ class DocGrupo extends ActiveRecord
         return [
             [['Grupo'], 'required'],
             [['Grupo'], 'string', 'max' => 45],
+            [['Grupo'], 'unique'],
         ];
     }
 

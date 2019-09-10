@@ -71,7 +71,11 @@ class DocEstudianteController extends RestController
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        Yii::$app->api->sendSuccessResponse($model->attributes);
+        $persona = $model->getPersona()->select(["CONCAT(
+            PrimerNombre, ' ', IFNULL(SegundoNombre, ''), ' ', 
+            ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto"])->asArray(true)->one();
+        $response = array_merge($model->attributes, $persona);        
+        Yii::$app->api->sendSuccessResponse($response);
     }
 
     public function actionDelete($id)

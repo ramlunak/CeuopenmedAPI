@@ -32,6 +32,7 @@ class DocEspecialidad extends ActiveRecord
         return [
             [['Especialidad'], 'required'],
             [['Especialidad'], 'string', 'max' => 150],
+            [['Especialidad'], 'unique'],
         ];
     }
 

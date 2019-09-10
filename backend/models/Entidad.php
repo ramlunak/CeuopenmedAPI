@@ -38,7 +38,7 @@ class Entidad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['IdTipoEntidad', 'IdEstudiante'], 'required'],
+            [['IdTipoEntidad', 'IdEstudiante', 'Estado'], 'required'],
             [['IdTipoEntidad', 'IdEstudiante', 'IdProfesor', 'Evaluacion', 'Estado'], 'integer'],
             [['Comentario'], 'string'],
             [

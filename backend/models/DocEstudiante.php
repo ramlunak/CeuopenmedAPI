@@ -16,7 +16,6 @@ use \yii\db\ActiveRecord;
  * @property AdmPersona $persona
  * @property DocGrupo $grupo
  * @property Entidad[] $entidads
- * @property TipoEntidad[] $tipoEntidads
  */
 class DocEstudiante extends ActiveRecord
 {
@@ -89,14 +88,6 @@ class DocEstudiante extends ActiveRecord
     public function getEntidads()
     {
         return $this->hasMany(Entidad::className(), ['IdEstudiante' => 'IdEstudiante']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTipoEntidads()
-    {
-        return $this->hasMany(TipoEntidad::className(), ['IdEstudiante' => 'IdEstudiante']);
     }
 
     static public function search($params)

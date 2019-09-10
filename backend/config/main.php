@@ -138,6 +138,7 @@ return [
                 'entidad/create'=>'entidad/create',
                 'entidad/update/<id>'=>'entidad/update',
                 'entidad/delete/<id>'=>'entidad/delete',
+                'entidad/profesor-evaluations/<idprofesor:\d+>/<estado:\d+>'=>'entidad/profesor-evaluations',
 
                 // Detalle Entidad
                 'detalle-entidad'=>'detalle-entidad/index',

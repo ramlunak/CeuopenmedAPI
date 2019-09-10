@@ -94,10 +94,15 @@ class SiteController extends RestController
         $tempData = DocEstudiante::findOne(['IdPersona' => $persona->IdPersona]);
         if ($tempData) {
             $data['IdEstudiante'] = $tempData->IdEstudiante;
+            $data['IdProfesor'] = 0;
         } else {
             $tempData = DocProfesor::findOne(['IdPersona' => $persona->IdPersona]);
             if ($tempData) {
                 $data['IdProfesor'] = $tempData->IdProfesor;
+                $data['IdEstudiante'] = 0;
+            } else {
+                $data['IdEstudiante'] = 0;
+                $data['IdProfesor'] = 0;
             }
         }
 
@@ -203,5 +208,4 @@ class SiteController extends RestController
         $model->username = $username;
         $model->existUserName();
     }
-
 }

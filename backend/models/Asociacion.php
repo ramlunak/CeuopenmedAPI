@@ -39,7 +39,7 @@ class Asociacion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['IdEntidad1', 'IdEntidad2', 'IdTipoAsociacion', 'IdEstudiante', 'IdProfesor'], 'required'],
+            [['IdEntidad1', 'IdEntidad2', 'IdTipoAsociacion', 'IdEstudiante', 'Estado'], 'required'],
             [['IdEntidad1', 'IdEntidad2', 'IdTipoAsociacion', 'IdEstudiante', 'IdProfesor', 'Evaluacion', 'Estado'], 'integer'],
             [['Comentario'], 'string'],
             [

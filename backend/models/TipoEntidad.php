@@ -9,13 +9,11 @@ use Yii;
  *
  * @property int $IdTipoEntidad
  * @property int $IdIdioma
- * @property int $IdEstudiante
  * @property string $TipoEntidad
  *
  * @property Entidad[] $entidads
  * @property TipoAsociacion[] $tipoAsociacions
  * @property TipoAsociacion[] $tipoAsociacions0
- * @property DocEstudiante $estudiante
  * @property Idioma $idioma
  */
 class TipoEntidad extends \yii\db\ActiveRecord
@@ -34,13 +32,9 @@ class TipoEntidad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['IdIdioma', 'IdEstudiante', 'TipoEntidad'], 'required'],
-            [['IdIdioma', 'IdEstudiante'], 'integer'],
-            [['TipoEntidad'], 'string', 'max' => 100],
-            [
-                ['IdEstudiante'], 'exist', 'skipOnError' => true, 'targetClass' => DocEstudiante::className(),
-                'targetAttribute' => ['IdEstudiante' => 'IdEstudiante'], 'message' => 'El estudiante que seleccionó no existe en la Base de Datos del Sistema.'
-            ],
+            [['IdIdioma', 'TipoEntidad'], 'required'],
+            [['IdIdioma'], 'integer'],
+            [['TipoEntidad'], 'string', 'max' => 100],            
             [
                 ['IdIdioma'], 'exist', 'skipOnError' => true, 'targetClass' => Idioma::className(),
                 'targetAttribute' => ['IdIdioma' => 'IdIdioma'], 'message' => 'El idioma que seleccionó no existe en la Base de Datos del Sistema.'
@@ -56,8 +50,7 @@ class TipoEntidad extends \yii\db\ActiveRecord
         return [
             'IdTipoEntidad' => 'Id Tipo Entidad',
             'IdIdioma' => 'Id Idioma',
-            'IdEstudiante' => 'Id Estudiante',
-            'TipoEntidad' => 'Tipo de Entidad',
+            'TipoEntidad' => 'Tipo Entidad',
         ];
     }
 
@@ -83,15 +76,7 @@ class TipoEntidad extends \yii\db\ActiveRecord
     public function getTipoAsociacions0()
     {
         return $this->hasMany(TipoAsociacion::className(), ['IdTipoEntidad2' => 'IdTipoEntidad']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEstudiante()
-    {
-        return $this->hasOne(DocEstudiante::className(), ['IdEstudiante' => 'IdEstudiante']);
-    }
+    }    
 
     /**
      * @return \yii\db\ActiveQuery
@@ -113,12 +98,8 @@ class TipoEntidad extends \yii\db\ActiveRecord
 
 
         $query = TipoEntidad::find()
-            ->select(['{{tipo_entidad}}.*', "CONCAT(
-                PrimerNombre, ' ', IFNULL(SegundoNombre, ''), ' ', 
-                ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto", 'Idioma'])
+            ->select(['{{tipo_entidad}}.*', 'Idioma'])
             ->leftJoin('idioma', '`tipo_entidad`.`IdIdioma` = `idioma`.`IdIdioma`')
-            ->leftJoin('doc_estudiante', '`tipo_entidad`.`IdEstudiante` = `doc_estudiante`.`IdEstudiante`')
-            ->leftJoin('adm_persona', '`doc_estudiante`.`IdPersona` = `adm_persona`.`IdPersona`')
             ->asArray(true);
 
 
@@ -127,9 +108,6 @@ class TipoEntidad extends \yii\db\ActiveRecord
         }
         if (isset($params['IdIdioma'])) {
             $query->andFilterWhere(['tipo_entidad.IdIdioma' => $params['IdIdioma']]);
-        }
-        if (isset($params['IdEstudiante'])) {
-            $query->andFilterWhere(['tipo_entidad.IdEstudiante' => $params['IdEstudiante']]);
         }
         if (isset($params['TipoEntidad'])) {
             $query->andFilterWhere(['like', 'TipoEntidad', $params['TipoEntidad']]);
