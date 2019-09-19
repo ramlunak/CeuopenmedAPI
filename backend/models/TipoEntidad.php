@@ -34,7 +34,8 @@ class TipoEntidad extends \yii\db\ActiveRecord
         return [
             [['IdIdioma', 'TipoEntidad'], 'required'],
             [['IdIdioma'], 'integer'],
-            [['TipoEntidad'], 'string', 'max' => 100],            
+            [['TipoEntidad'], 'string', 'max' => 100],
+            [['TipoEntidad'], 'unique'],     
             [
                 ['IdIdioma'], 'exist', 'skipOnError' => true, 'targetClass' => Idioma::className(),
                 'targetAttribute' => ['IdIdioma' => 'IdIdioma'], 'message' => 'El idioma que seleccionó no existe en la Base de Datos del Sistema.'

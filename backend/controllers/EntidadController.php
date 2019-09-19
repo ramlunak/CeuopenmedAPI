@@ -118,36 +118,38 @@ class EntidadController extends RestController
         if (($model = DocProfesor::findOne($id)) !== null) {
             return $model;
         } else {
-            Yii::$app->api->sendFailedResponse("El Registro requerido no existe");
+            Yii::$app->api->sendFailedResponse("El Profesor requerido no existe");
         }
     }
 
     public  function actionProfesorEvaluations($idprofesor, $estado)
     {
-        $model = $this->findProfesorModel($idprofesor);
-        $grupos = $model->getGrupos()
+        $this->findProfesorModel($idprofesor);
+        $model = (new \yii\db\Query())
             ->select([
-                '{{entidad}}.*', "CONCAT(est.PrimerNombre, ' ', IFNULL(est.SegundoNombre, ''), 
-                ' ', est.ApellidoPaterno, ' ', est.ApellidoMaterno) AS Estudiante", 'Grupo',
-                'TipoEntidad'/*, 'Entidad', 'Idioma'*/
+                '{{entidad}}.*',
+                "CONCAT(est.PrimerNombre, ' ', IFNULL(est.SegundoNombre, ''), 
+                ' ', est.ApellidoPaterno, ' ', est.ApellidoMaterno) AS Estudiante",
+                '(SELECT Entidad FROM detalle_entidad WHERE Entidad.IdEntidad = detalle_entidad.IdEntidad LIMIT 1) AS Entidad',
+                '(SELECT IdIdioma FROM detalle_entidad WHERE Entidad.IdEntidad = detalle_entidad.IdEntidad LIMIT 1) AS DetalleIdEntidad',
+                '(SELECT idioma FROM Idioma WHERE IdIdioma = DetalleIdEntidad LIMIT 1) AS Idioma',
+                '(SELECT TipoEntidad FROM tipo_entidad WHERE IdTipoEntidad = entidad.IdTipoEntidad LIMIT 1) AS TipoEntidad',
             ])
-            //->distinct('entidad.IdEntidad')
-            ->leftJoin('doc_estudiante', '`doc_grupo`.`IdGrupo` = `doc_estudiante`.`IdGrupo`')
-            ->leftJoin('adm_persona AS est', '`doc_estudiante`.`IdPersona` = `est`.`IdPersona`')
-            ->leftJoin('entidad', '`doc_estudiante`.`IdEstudiante` = `entidad`.`IdEstudiante`')
-            ->leftJoin('tipo_entidad', '`entidad`.`IdTipoEntidad` = `tipo_entidad`.`IdTipoEntidad`')
-            //->leftJoin('detalle_entidad', '`entidad`.`IdEntidad` = `detalle_entidad`.`IdEntidad`')
-            //->leftJoin('idioma', '`detalle_entidad`.`IdIdioma` = `idioma`.`IdIdioma`')
-            ->andFilterWhere(['entidad.Estado' => $estado])
-            ->asArray(true);
+            ->from('doc_profesor_has_doc_grupo, doc_estudiante,entidad, adm_persona AS est')
+            ->where('doc_profesor_has_doc_grupo.IdGrupo = doc_estudiante.IdGrupo')
+            ->andWhere('entidad.IdEstudiante = doc_estudiante.IdEstudiante')
+            ->andWhere('est.IdPersona = doc_estudiante.IdPersona')
+            ->andFilterWhere(['doc_profesor_has_doc_grupo.IdProfesor' => $idprofesor])
+            ->andFilterWhere(['entidad.Estado' => $estado]);
+
         $additional_info = [
             'page' => 'No Define',
             'size' => 'No Define',
-            'totalCount' => (int) $grupos->count()
+            'totalCount' => (int) $model->count()
         ];
 
         $response = [
-            'data' => $grupos->all(),
+            'data' => $model->all(),
             'info' => $additional_info
         ];
         Yii::$app->api->sendSuccessResponse($response['data'], $response['info']);

@@ -45,9 +45,9 @@ return [
                 ],
             ],
         ],
-        /*'errorHandler' => [
+        'errorHandler' => [
             'errorAction' => 'site/error',
-        ],*/
+        ],
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
             'enablePrettyUrl' => true,
@@ -147,6 +147,13 @@ return [
                 'detalle-entidad/update/<id>'=>'detalle-entidad/update',
                 'detalle-entidad/delete/<id>'=>'detalle-entidad/delete',
 
+                // Recurso Entidad
+                'recurso'=>'recurso/index',
+                'recurso/view/<id>'=>'recurso/view',
+                'recurso/create'=>'recurso/create',
+                'recurso/update/<id>'=>'recurso/update',
+                'recurso/delete/<id>'=>'recurso/delete',
+
                 // Tipo_Asociacion
                 'tipo-asociacion'=>'tipo-asociacion/index',
                 'tipo-asociacion/view/<id>'=>'tipo-asociacion/view',
@@ -160,6 +167,7 @@ return [
                 'asociacion/create'=>'asociacion/create',
                 'asociacion/update/<id>'=>'asociacion/update',
                 'asociacion/delete/<id>'=>'asociacion/delete',
+                'asociacion/associate-entitys/<identidad:\d+>'=>'asociacion/associate-entitys',
 
                 // Begin borrar ejemplo
                 'employees'=>'employee/index',

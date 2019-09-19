@@ -21,6 +21,7 @@ use Yii;
  * @property DocEstudiante $estudiante
  * @property DocProfesor $profesor
  * @property TipoEntidad $tipoEntidad
+ * @property Recurso[] $recursos
  */
 class Entidad extends \yii\db\ActiveRecord
 {
@@ -115,6 +116,14 @@ class Entidad extends \yii\db\ActiveRecord
     {
         return $this->hasOne(TipoEntidad::className(), ['IdTipoEntidad' => 'IdTipoEntidad']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRecursos()
+    {
+        return $this->hasMany(Recurso::className(), ['IdEntidad' => 'IdEntidad']);
+    }
         
     static public function search($params)
     {
@@ -135,7 +144,7 @@ class Entidad extends \yii\db\ActiveRecord
                 ' ', prof.ApellidoPaterno, ' ', prof.ApellidoMaterno) AS Profesor",
                 'TipoEntidad', 'IdRecurso', 'detalle_entidad.IdIdioma', 'Entidad', 'Referencia', 'Nivel', 'IsImage', 'Idioma'
             ])
-            ->distinct('IdEntidad')
+            ->distinct()
             ->leftJoin('tipo_entidad', '`entidad`.`IdTipoEntidad` = `tipo_entidad`.`IdTipoEntidad`')
             ->leftJoin('detalle_entidad', '`entidad`.`IdEntidad` = `detalle_entidad`.`IdEntidad`')
             ->leftJoin('idioma', '`detalle_entidad`.`IdIdioma` = `idioma`.`IdIdioma`')
