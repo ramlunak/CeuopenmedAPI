@@ -120,7 +120,10 @@ class AsociacionController extends RestController
                 "(SELECT Comentario FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as Comentario",
                 "(SELECT IdProfesor FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as IdProfesor",
                 "(SELECT IdAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as IdAsociacion",
-
+                "(SELECT IdTipoAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as asociacionIdTipoAsociacion",
+                "(SELECT IdTipoAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as IdTipoAsociacion",
+                "(SELECT TipoAsociacion FROM tipo_asociacion WHERE IdTipoAsociacion = asociacionIdTipoAsociacion) as TipoAsociacion",
+                
             ])
             ->from('doc_profesor_has_doc_grupo,doc_estudiante,entidad,adm_persona AS est,tipo_asociacion')
             ->where('doc_profesor_has_doc_grupo.IdGrupo = doc_estudiante.IdGrupo')
