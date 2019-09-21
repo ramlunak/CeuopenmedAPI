@@ -4,9 +4,6 @@ namespace common\components;
 
 use Yii;
 use yii\base\Component;
-use yii\base\InvalidConfigException;
-use yii\helpers\Json;
-use common\models\User;
 
 use common\models\AuthorizationCodes;
 use common\models\AccessTokens;
@@ -23,7 +20,7 @@ class Api extends Component
 
         echo json_encode(array('status' => 0, 'error_code' => $statusCode, 'errors' => $message));
 
-        Yii::$app->end();
+        exit;
     }
 
     public function sendSuccessResponse($data = false, $additional_info = null)
@@ -51,9 +48,8 @@ class Api extends Component
             echo $response;
         } else {
             echo $response;
-        }
-
-        Yii::$app->end();
+        }       
+        exit;
     }
 
     protected function setHeader($status)

@@ -134,7 +134,8 @@ class AsociacionController extends RestController
                 AND tipo_asociacion.IdTipoEntidad2 = entidad.IdTipoEntidad ) 
                 OR (tipo_asociacion.IdTipoEntidad2 = (SELECT IdTipoEntidad FROM entidad WHERE IdEntidad = " . $identidad . ") 
                 AND tipo_asociacion.IdTipoEntidad1 = entidad.IdTipoEntidad)))
-            ");
+            ")
+            ->andWhere('Estado = 1 AND Evaluacion = 1');
 
         $additional_info = [
             'page' => 'No Define',
