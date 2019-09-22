@@ -18,11 +18,11 @@ class TipoAsociacionController extends RestController
 
         return $behaviors + [
 
-           'apiauth' => [
-               'class' => Apiauth::className(),
-               'exclude' => [],
-               'callback'=>[]
-           ],            
+            'apiauth' => [
+                'class' => Apiauth::className(),
+                'exclude' => [],
+                'callback' => []
+            ],
             'verbs' => [
                 'class' => Verbcheck::className(),
                 'actions' => [
@@ -30,7 +30,8 @@ class TipoAsociacionController extends RestController
                     'create' => ['POST'],
                     'update' => ['PUT'],
                     'view' => ['GET'],
-                    'delete' => ['DELETE']
+                    'delete' => ['DELETE'],
+                    'relationship' => ['GET'],
                 ],
             ],
 
@@ -88,5 +89,33 @@ class TipoAsociacionController extends RestController
         } else {
             Yii::$app->api->sendFailedResponse("El Registro requerido no existe");
         }
+    }
+
+    public function actionRelationship($idTipoEntidad1, $idTipoEntidad2)
+    {
+        $query = TipoAsociacion::find()
+            ->select([
+                '{{tipo_asociacion}}.*',
+                'tent1.TipoEntidad AS TipoEntidad1',
+                'tent2.TipoEntidad AS TipoEntidad2'
+            ])
+            ->leftJoin('tipo_entidad AS tent1', '`tipo_asociacion`.`IdTipoEntidad1` = `tent1`.`IdTipoEntidad`')
+            ->leftJoin('tipo_entidad AS tent2', '`tipo_asociacion`.`IdTipoEntidad2` = `tent2`.`IdTipoEntidad`')
+            ->andWhere("
+                (((tipo_asociacion.IdTipoEntidad1 = " . $idTipoEntidad1 . " AND tipo_asociacion.IdTipoEntidad2 = " . $idTipoEntidad2 . " ) 
+                OR (tipo_asociacion.IdTipoEntidad2 = " . $idTipoEntidad1 . " AND tipo_asociacion.IdTipoEntidad1 = " . $idTipoEntidad2 . ")))")
+            ->asArray(true);
+
+        $additional_info = [
+            'page' => 'No Define',
+            'size' => 'No Define',
+            'totalCount' => (int) $query->count()
+        ];
+
+        $response = [
+            'data' => $query->all(),
+            'info' => $additional_info
+        ];
+        Yii::$app->api->sendSuccessResponse($response['data'], $response['info']);
     }
 }
