@@ -135,7 +135,24 @@ class AsociacionController extends RestController
                 AND tipo_asociacion.IdTipoEntidad2 = entidad.IdTipoEntidad ) 
                 OR (tipo_asociacion.IdTipoEntidad2 = (SELECT IdTipoEntidad FROM entidad WHERE IdEntidad = " . $identidad . ") 
                 AND tipo_asociacion.IdTipoEntidad1 = entidad.IdTipoEntidad)))
-            ");
+            ")
+            ->groupBy('IdEntidad,
+            IdTipoEntidad,
+            IdEstudiante,
+            Estudiante,
+            Entidad,
+            DetalleIdEntidad,
+            Idioma,
+            TipoEntidad,
+            Estado,
+            Evaluacion,
+            Comentario,
+            IdProfesor,
+            IdAsociacion,
+            asociacionIdTipoAsociacion,           
+            IdTipoAsociacion,
+            TipoAsociacion');
+
 
         $additional_info = [
             'page' => 'No Define',
@@ -183,7 +200,9 @@ class AsociacionController extends RestController
                 OR (tipo_asociacion.IdTipoEntidad2 = (SELECT IdTipoEntidad FROM entidad WHERE IdEntidad = " . $identidad . ") 
                 AND tipo_asociacion.IdTipoEntidad1 = entidad.IdTipoEntidad)))
             ")
-            ->andWhere('entidad.Estado = 1 && entidad.Evaluacion = 1');
+            ->andWhere('entidad.Estado = 1 && entidad.Evaluacion = 1 && entidad.IdEntidad != ' . $identidad . '')
+            ->andWhere('(SELECT IdAsociacion FROM asociacion WHERE (IdEntidad1 = ' . $identidad . ' AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = ' . $identidad . ' AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) > 1');
+           
 
         $additional_info = [
             'page' => 'No Define',

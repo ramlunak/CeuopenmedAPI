@@ -102,10 +102,10 @@ class TipoAsociacionController extends RestController
             ->leftJoin('tipo_entidad AS tent1', '`tipo_asociacion`.`IdTipoEntidad1` = `tent1`.`IdTipoEntidad`')
             ->leftJoin('tipo_entidad AS tent2', '`tipo_asociacion`.`IdTipoEntidad2` = `tent2`.`IdTipoEntidad`')
             ->andWhere("
-                (((tipo_asociacion.IdTipoEntidad1 = " . $idTipoEntidad1 . " AND tipo_asociacion.IdTipoEntidad2 = " . $idTipoEntidad2 . " ) 
-                OR (tipo_asociacion.IdTipoEntidad2 = " . $idTipoEntidad1 . " AND tipo_asociacion.IdTipoEntidad1 = " . $idTipoEntidad2 . ")))")
+                (((tipo_asociacion.IdTipoEntidad1 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idTipoEntidad1 . " LIMIT 1) AND tipo_asociacion.IdTipoEntidad2 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idTipoEntidad2 . " LIMIT 1) ) 
+                OR (tipo_asociacion.IdTipoEntidad2 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idTipoEntidad1 . " LIMIT 1) AND tipo_asociacion.IdTipoEntidad1 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idTipoEntidad2 . " LIMIT 1))))")
             ->asArray(true);
-
+            
         $additional_info = [
             'page' => 'No Define',
             'size' => 'No Define',
