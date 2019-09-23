@@ -102,15 +102,10 @@ class TipoAsociacionController extends RestController
             ->leftJoin('tipo_entidad AS tent1', 'tipo_asociacion.`IdTipoEntidad1` = tent1.`IdTipoEntidad`')
             ->leftJoin('tipo_entidad AS tent2', 'tipo_asociacion.`IdTipoEntidad2` = tent2.`IdTipoEntidad`')
             ->andWhere("
-<<<<<<< HEAD
-                (((tipo_asociacion.IdTipoEntidad1 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idTipoEntidad1 . " LIMIT 1) AND tipo_asociacion.IdTipoEntidad2 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idTipoEntidad2 . " LIMIT 1) ) 
-                OR (tipo_asociacion.IdTipoEntidad2 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idTipoEntidad1 . " LIMIT 1) AND tipo_asociacion.IdTipoEntidad1 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idTipoEntidad2 . " LIMIT 1))))")
-=======
                 (((tipo_asociacion.IdTipoEntidad1 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idEntidad1 . " LIMIT 1) 
                     AND tipo_asociacion.IdTipoEntidad2 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idEntidad2 . " LIMIT 1) ) 
                 OR (tipo_asociacion.IdTipoEntidad2 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idEntidad1 . " LIMIT 1) 
                     AND tipo_asociacion.IdTipoEntidad1 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idEntidad2 . " LIMIT 1))))")
->>>>>>> 3c4e50bc0f0107f409d62581ddd48685c11a95be
             ->asArray(true);
             
         $additional_info = [
