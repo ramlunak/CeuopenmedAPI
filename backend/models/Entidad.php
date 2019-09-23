@@ -142,7 +142,7 @@ class Entidad extends \yii\db\ActiveRecord
                 ' ', est.ApellidoPaterno, ' ', est.ApellidoMaterno) AS Estudiante",
                 "CONCAT(prof.PrimerNombre, ' ', IFNULL(prof.SegundoNombre, ''), 
                 ' ', prof.ApellidoPaterno, ' ', prof.ApellidoMaterno) AS Profesor",
-                'TipoEntidad', 'IdRecurso', 'detalle_entidad.IdIdioma', 'Entidad', 'Referencia', 'Nivel', 'IsImage', 'Idioma'
+                'TipoEntidad', 'IdRecurso', 'detalle_entidad.IdIdioma', 'Entidad', 'Nivel', 'Idioma'
             ])
             ->distinct()
             ->leftJoin('tipo_entidad', '`entidad`.`IdTipoEntidad` = `tipo_entidad`.`IdTipoEntidad`')

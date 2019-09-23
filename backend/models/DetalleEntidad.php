@@ -11,9 +11,7 @@ use Yii;
  * @property int $IdIdioma
  * @property int $IdEntidad
  * @property string $Entidad
- * @property string $Referencia
  * @property int $Nivel
- * @property bool $IsImage
  *
  * @property Entidad $entidad
  * @property Idioma $idioma
@@ -36,8 +34,7 @@ class DetalleEntidad extends \yii\db\ActiveRecord
         return [
             [['IdIdioma', 'IdEntidad', 'Entidad'], 'required'],
             [['IdIdioma', 'IdEntidad', 'Nivel'], 'integer'],
-            [['Entidad', 'Referencia'], 'string'],
-            [['IsImage'], 'boolean'],
+            [['Entidad'], 'string'],
             [
                 ['IdEntidad'], 'exist', 'skipOnError' => true, 'targetClass' => Entidad::className(),
                 'targetAttribute' => ['IdEntidad' => 'IdEntidad'], 'message' => 'La Entidad que seleccionó no existe en la Base de Datos del Sistema.'
@@ -59,9 +56,7 @@ class DetalleEntidad extends \yii\db\ActiveRecord
             'IdIdioma' => 'Id Idioma',
             'IdEntidad' => 'Id Entidad',
             'Entidad' => 'Entidad',
-            'Referencia' => 'Referencia',
             'Nivel' => 'Nivel',
-            'IsImage' => 'Is Image',
         ];
     }
 
@@ -110,14 +105,8 @@ class DetalleEntidad extends \yii\db\ActiveRecord
         if (isset($params['Entidad'])) {
             $query->andFilterWhere(['like', 'Entidad', $params['Entidad']]);
         }
-        if (isset($params['Referencia'])) {
-            $query->andFilterWhere(['like', 'Referencia', $params['Referencia']]);
-        }
         if (isset($params['Nivel'])) {
             $query->andFilterWhere(['Nivel' => $params['Nivel']]);
-        }
-        if (isset($params['IsImage'])) {
-            $query->andFilterWhere(['IsImage' => $params['IsImage']]);
         }
 
 

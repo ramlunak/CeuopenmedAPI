@@ -173,7 +173,7 @@ return [
                 'tipo-asociacion/create' => 'tipo-asociacion/create',
                 'tipo-asociacion/update/<id>' => 'tipo-asociacion/update',
                 'tipo-asociacion/delete/<id>' => 'tipo-asociacion/delete',
-                'tipo-asociacion/relationship/<idTipoEntidad1:\d+>/<idTipoEntidad2:\d+>' => 'tipo-asociacion/relationship',
+                'tipo-asociacion/relationship/<idEntidad1:\d+>/<idEntidad2:\d+>' => 'tipo-asociacion/relationship',
 
                 // Asociacion
                 'asociacion' => 'asociacion/index',
@@ -183,6 +183,9 @@ return [
                 'asociacion/delete/<id>' => 'asociacion/delete',
                 'asociacion/associate-entitys/<identidad:\d+>' => 'asociacion/associate-entitys',
                 'asociacion/evaluated-associate-entitys/<identidad:\d+>' => 'asociacion/evaluated-associate-entitys',
+
+                // Reportes
+                'reportes/count-evaluations-profesor/<idprofesor:\d+>' => 'reportes/count-evaluations-profesor',
 
                 // Begin borrar ejemplo
                 'employees' => 'employee/index',

@@ -91,7 +91,7 @@ class TipoAsociacionController extends RestController
         }
     }
 
-    public function actionRelationship($idTipoEntidad1, $idTipoEntidad2)
+    public function actionRelationship($idEntidad1, $idEntidad2)
     {
         $query = TipoAsociacion::find()
             ->select([
@@ -99,11 +99,18 @@ class TipoAsociacionController extends RestController
                 'tent1.TipoEntidad AS TipoEntidad1',
                 'tent2.TipoEntidad AS TipoEntidad2'
             ])
-            ->leftJoin('tipo_entidad AS tent1', '`tipo_asociacion`.`IdTipoEntidad1` = `tent1`.`IdTipoEntidad`')
-            ->leftJoin('tipo_entidad AS tent2', '`tipo_asociacion`.`IdTipoEntidad2` = `tent2`.`IdTipoEntidad`')
+            ->leftJoin('tipo_entidad AS tent1', 'tipo_asociacion.`IdTipoEntidad1` = tent1.`IdTipoEntidad`')
+            ->leftJoin('tipo_entidad AS tent2', 'tipo_asociacion.`IdTipoEntidad2` = tent2.`IdTipoEntidad`')
             ->andWhere("
+<<<<<<< HEAD
                 (((tipo_asociacion.IdTipoEntidad1 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idTipoEntidad1 . " LIMIT 1) AND tipo_asociacion.IdTipoEntidad2 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idTipoEntidad2 . " LIMIT 1) ) 
                 OR (tipo_asociacion.IdTipoEntidad2 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idTipoEntidad1 . " LIMIT 1) AND tipo_asociacion.IdTipoEntidad1 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idTipoEntidad2 . " LIMIT 1))))")
+=======
+                (((tipo_asociacion.IdTipoEntidad1 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idEntidad1 . " LIMIT 1) 
+                    AND tipo_asociacion.IdTipoEntidad2 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idEntidad2 . " LIMIT 1) ) 
+                OR (tipo_asociacion.IdTipoEntidad2 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idEntidad1 . " LIMIT 1) 
+                    AND tipo_asociacion.IdTipoEntidad1 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idEntidad2 . " LIMIT 1))))")
+>>>>>>> 3c4e50bc0f0107f409d62581ddd48685c11a95be
             ->asArray(true);
             
         $additional_info = [
