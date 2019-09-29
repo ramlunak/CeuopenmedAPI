@@ -9,7 +9,6 @@ use Yii;
  *
  * @property int $IdTipoEntidad
  * @property string $TipoEntidad
- * @property int $Nivel
  *
  * @property Entidad[] $entidads
  * @property TipoAsociacion[] $tipoAsociacions
@@ -32,8 +31,7 @@ class TipoEntidad extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['TipoEntidad', 'Nivel'], 'required'],
-            [['Nivel'], 'integer'],
+            [['TipoEntidad'], 'required'],
             [['TipoEntidad'], 'string', 'max' => 100],
             [['TipoEntidad'], 'unique'],
         ];
@@ -46,7 +44,6 @@ class TipoEntidad extends \yii\db\ActiveRecord
     {
         return [
             'IdTipoEntidad' => 'Id Tipo Entidad',
-            'IdIdioma' => 'Id Idioma',
             'TipoEntidad' => 'Tipo Entidad',
         ];
     }
@@ -104,9 +101,6 @@ class TipoEntidad extends \yii\db\ActiveRecord
         }        
         if (isset($params['TipoEntidad'])) {
             $query->andFilterWhere(['like', 'TipoEntidad', $params['TipoEntidad']]);
-        }
-        if (isset($params['Nivel'])) {
-            $query->andFilterWhere(['Nivel' => $params['Nivel']]);
         }
 
 

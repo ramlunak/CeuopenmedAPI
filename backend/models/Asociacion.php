@@ -15,6 +15,7 @@ use Yii;
  * @property int $IdProfesor
  * @property int $Evaluacion
  * @property int $Estado
+ * @property int $Nivel
  * @property string $Comentario
  *
  * @property DocEstudiante $estudiante
@@ -41,7 +42,7 @@ class Asociacion extends \yii\db\ActiveRecord
     {
         return [
             [['IdEntidad1', 'IdEntidad2', 'IdTipoAsociacion', 'IdEstudiante', 'Estado'], 'required'],
-            [['IdEntidad1', 'IdEntidad2', 'IdTipoAsociacion', 'IdEstudiante', 'IdProfesor', 'Evaluacion', 'Estado'], 'integer'],
+            [['IdEntidad1', 'IdEntidad2', 'IdTipoAsociacion', 'IdEstudiante', 'IdProfesor', 'Evaluacion', 'Estado', 'Nivel'], 'integer'],
             [['Comentario'], 'string'],
             [
                 ['IdEstudiante'], 'exist', 'skipOnError' => true, 'targetClass' => DocEstudiante::className(),
@@ -80,6 +81,7 @@ class Asociacion extends \yii\db\ActiveRecord
             'IdProfesor' => 'Id Profesor',
             'Evaluacion' => 'Evaluacion',
             'Estado' => 'Estado',
+            'Nivel' => 'Nivel',
             'Comentario' => 'Comentario',
         ];
     }
@@ -149,8 +151,8 @@ class Asociacion extends \yii\db\ActiveRecord
                 ' ', est.ApellidoPaterno, ' ', est.ApellidoMaterno) AS Estudiante",
                 "CONCAT(prof.PrimerNombre, ' ', IFNULL(prof.SegundoNombre, ''), 
                 ' ', prof.ApellidoPaterno, ' ', prof.ApellidoMaterno) AS Profesor",
-                'ent1.Entidad AS Entidad1',
-                'ent2.Entidad AS Entidad2',
+                '(SELECT Entidad FROM detalle_entidad WHERE ent1.IdEntidad = detalle_entidad.IdEntidad LIMIT 1) AS Entidad1',
+                '(SELECT Entidad FROM detalle_entidad WHERE ent2.IdEntidad = detalle_entidad.IdEntidad LIMIT 1) AS Entidad2',
                 'TipoAsociacion'
             ])
             ->leftJoin('entidad AS ent1', '`asociacion`.`IdEntidad1` = `ent1`.`IdEntidad`')
@@ -186,6 +188,9 @@ class Asociacion extends \yii\db\ActiveRecord
         }
         if (isset($params['Estado'])) {
             $query->andFilterWhere(['Estado' => $params['Estado']]);
+        }
+        if (isset($params['Nivel'])) {
+            $query->andFilterWhere(['Nivel' => $params['Nivel']]);
         }
         if (isset($params['Comentario'])) {
             $query->andFilterWhere(['like', 'Comentario', $params['Comentario']]);

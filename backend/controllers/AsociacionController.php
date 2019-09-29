@@ -136,24 +136,7 @@ class AsociacionController extends RestController
                 AND tipo_asociacion.IdTipoEntidad2 = entidad.IdTipoEntidad ) 
                 OR (tipo_asociacion.IdTipoEntidad2 = (SELECT IdTipoEntidad FROM entidad WHERE IdEntidad = " . $identidad . ") 
                 AND tipo_asociacion.IdTipoEntidad1 = entidad.IdTipoEntidad)))
-            ")
-            /*->groupBy('
-                IdEntidad, 
-                IdTipoEntidad,
-                IdEstudiante, 
-                Estudiante,
-                Entidad,
-                DetalleIdEntidad,
-                Idioma,
-                Estado,
-                Evaluacion,
-                Comentario,
-                IdProfesor,
-                IdAsociacion,
-                AsociacionIdTipoAsociacion,
-                IdTipoAsociacion,
-                TipoAsociacion
-            ')*/;
+            ");
 
         $additional_info = [
             'page' => 'No Define',
@@ -178,8 +161,6 @@ class AsociacionController extends RestController
                 'entidad.IdEstudiante',
                 "CONCAT(est.PrimerNombre, ' ', IFNULL(est.SegundoNombre, ''), 
                 ' ', est.ApellidoPaterno, ' ', est.ApellidoMaterno) AS Estudiante",
-                /*"CONCAT(prof.PrimerNombre, ' ', IFNULL(prof.SegundoNombre, ''), 
-                ' ', prof.ApellidoPaterno, ' ', prof.ApellidoMaterno) AS Profesor",*/
                 '(SELECT Entidad FROM detalle_entidad WHERE Entidad.IdEntidad = detalle_entidad.IdEntidad LIMIT 1) AS Entidad',
                 "(SELECT IdIdioma FROM detalle_entidad WHERE Entidad.IdEntidad = detalle_entidad.IdEntidad LIMIT 1) AS DetalleIdEntidad",
                 "(SELECT idioma FROM Idioma WHERE IdIdioma = DetalleIdEntidad LIMIT 1) AS Idioma",
@@ -205,6 +186,7 @@ class AsociacionController extends RestController
                 AND tipo_asociacion.IdTipoEntidad1 = entidad.IdTipoEntidad)))
             ")
             ->andWhere('entidad.Estado = 1 AND entidad.Evaluacion = 1 AND entidad.IdEntidad != ' . $identidad . '')
+<<<<<<< HEAD
            
             ->andWhere("(SELECT IdAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) <> 'null'")
             ->andWhere('entidad.Evaluacion = 1')
@@ -227,6 +209,9 @@ class AsociacionController extends RestController
             ')*/
             /*->leftJoin('doc_profesor', '`IdProfesor` = `doc_profesor`.`IdProfesor`')
             ->leftJoin('adm_persona AS prof', '`doc_profesor`.`IdPersona` = `prof`.`IdPersona`')*/;
+=======
+            ->andWhere('entidad.Evaluacion = 1');
+>>>>>>> e08363ecbc5e25ae2c0fc070463a7ebc163adb95
 
         $additional_info = [
             'page' => 'No Define',

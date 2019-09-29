@@ -33,13 +33,13 @@ class AsociacionMultiple extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['IdAsociacion', 'IdEntidad', 'IdTipoAsociacionMultiple'], 'required'],
+            [['IdAsociacion'], 'required'],
             [['IdAsociacion', 'IdEntidad', 'IdTipoEntidad', 'IdTipoAsociacionMultiple'], 'integer'],
             [
                 ['IdAsociacion'], 'exist', 'skipOnError' => true, 'targetClass' => Asociacion::className(),
                 'targetAttribute' => ['IdAsociacion' => 'IdAsociacion'], 'message' => 'La Asociación que seleccionó no existe en la Base de Datos del Sistema.'
             ],
-            [
+            /*[
                 ['IdEntidad'], 'exist', 'skipOnError' => true, 'targetClass' => Entidad::className(),
                 'targetAttribute' => ['IdEntidad' => 'IdEntidad'], 'message' => 'La Entidad que seleccionó no existe en la Base de Datos del Sistema.'
             ],
@@ -47,7 +47,7 @@ class AsociacionMultiple extends \yii\db\ActiveRecord
                 ['IdTipoAsociacionMultiple'], 'exist', 'skipOnError' => true, 'targetClass' => TipoAsociacionMultiple::className(),
                 'targetAttribute' => ['IdTipoAsociacionMultiple' => 'IdTipoAsociacionMultiple'],
                 'message' => 'El Tipo de Asociacion Múltiple que seleccionó no existe en la Base de Datos del Sistema.'
-            ],
+            ],*/
         ];
     }
 
@@ -57,7 +57,7 @@ class AsociacionMultiple extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'IdAsociacionMultiple' => 'Id Asociacion Múltiple',
+            'IdAsociacionMultiple' => 'Id Asociación Múltiple',
             'IdAsociacion' => 'Id Asociación',
             'IdEntidad' => 'Id Entidad',
             'IdTipoEntidad' => 'Id Tipo Entidad',
