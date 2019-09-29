@@ -2,13 +2,13 @@
 
 namespace backend\controllers;
 
-use app\models\Recurso;
+use app\models\AsociacionMultiple;
 use backend\behaviours\Verbcheck;
 use backend\behaviours\Apiauth;
 
 use Yii;
 
-class RecursoController extends RestController
+class AsociacionMultipleController extends RestController
 {
 
     public function behaviors()
@@ -40,13 +40,13 @@ class RecursoController extends RestController
     public function actionIndex()
     {
         $params = $this->request['search'];
-        $response = Recurso::search($params);
+        $response = AsociacionMultiple::search($params);
         Yii::$app->api->sendSuccessResponse($response['data'], $response['info']);
     }
 
     public function actionCreate()
     {
-        $model = new Recurso;
+        $model = new AsociacionMultiple;
         $model->attributes = $this->request;
 
         if ($model->save()) {
@@ -83,7 +83,7 @@ class RecursoController extends RestController
 
     protected function findModel($id)
     {
-        if (($model = Recurso::findOne($id)) !== null) {
+        if (($model = AsociacionMultiple::findOne($id)) !== null) {
             return $model;
         } else {
             Yii::$app->api->sendFailedResponse("El Registro requerido no existe");

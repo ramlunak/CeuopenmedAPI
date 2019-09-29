@@ -8,15 +8,13 @@ use Yii;
  * This is the model class for table "recurso".
  *
  * @property int $IdRecurso
- * @property int $IdIdioma
  * @property int $IdEntidad
  * @property int $Nivel
  * @property string $URL
  * @property bool $IsImage
- * @property string $Descripcion
  *
  * @property Entidad $entidad
- * @property Idioma $idioma
+ * @property RecursoDescripcion[] $recursoDescripcions
  */
 class Recurso extends \yii\db\ActiveRecord
 {
@@ -34,13 +32,14 @@ class Recurso extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['IdIdioma', 'IdEntidad', 'Nivel', 'URL'], 'required'],
-            [['IdIdioma', 'IdEntidad', 'Nivel'], 'integer'],
+            [['IdEntidad', 'Nivel', 'URL'], 'required'],
+            [['IdEntidad', 'Nivel'], 'integer'],
             [['IsImage'], 'boolean'],
-            [['Descripcion'], 'string'],
             [['URL'], 'string', 'max' => 255],
-            [['IdEntidad'], 'exist', 'skipOnError' => true, 'targetClass' => Entidad::className(), 'targetAttribute' => ['IdEntidad' => 'IdEntidad']],
-            [['IdIdioma'], 'exist', 'skipOnError' => true, 'targetClass' => Idioma::className(), 'targetAttribute' => ['IdIdioma' => 'IdIdioma']],
+            [
+                ['IdEntidad'], 'exist', 'skipOnError' => true, 'targetClass' => Entidad::className(),
+                'targetAttribute' => ['IdEntidad' => 'IdEntidad'], 'message' => 'La Entidad que seleccionó no existe en la Base de Datos del Sistema.'
+            ],
         ];
     }
 
@@ -51,12 +50,10 @@ class Recurso extends \yii\db\ActiveRecord
     {
         return [
             'IdRecurso' => 'Id Recurso',
-            'IdIdioma' => 'Id Idioma',
             'IdEntidad' => 'Id Entidad',
             'Nivel' => 'Nivel',
             'URL' => 'Url',
             'IsImage' => 'Is Image',
-            'Descripcion' => 'Descripcion',
         ];
     }
 
@@ -71,9 +68,9 @@ class Recurso extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdioma()
+    public function getRecursoDescripcions()
     {
-        return $this->hasOne(Idioma::className(), ['IdIdioma' => 'IdIdioma']);
+        return $this->hasMany(RecursoDescripcion::className(), ['IdRecurso' => 'IdRecurso']);
     }
 
     static public function search($params)
@@ -88,31 +85,24 @@ class Recurso extends \yii\db\ActiveRecord
 
 
         $query = Recurso::find()
-            ->select(['{{recurso}}.*', 'Idioma'])
-            ->leftJoin('idioma', '`recurso`.`IdIdioma` = `idioma`.`IdIdioma`')
+            ->select(['{{recurso}}.*'])
             ->asArray(true);
 
 
         if (isset($params['IdRecurso'])) {
             $query->andFilterWhere(['IdRecurso' => $params['IdRecurso']]);
         }
-        if (isset($params['IdIdioma'])) {
-            $query->andFilterWhere(['recurso.IdIdioma' => $params['IdIdioma']]);
-        }
         if (isset($params['IdEntidad'])) {
             $query->andFilterWhere(['IdEntidad' => $params['IdEntidad']]);
         }
         if (isset($params['Nivel'])) {
             $query->andFilterWhere(['Nivel' => $params['Nivel']]);
-        }        
+        }
         if (isset($params['URL'])) {
             $query->andFilterWhere(['like', 'URL', $params['URL']]);
         }
         if (isset($params['IsImage'])) {
             $query->andFilterWhere(['IsImage' => $params['IsImage']]);
-        }
-        if (isset($params['Descripcion'])) {
-            $query->andFilterWhere(['like', 'Descripcion', $params['Descripcion']]);
         }
 
 

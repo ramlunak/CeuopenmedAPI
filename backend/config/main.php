@@ -167,6 +167,13 @@ return [
                 'recurso/update/<id>' => 'recurso/update',
                 'recurso/delete/<id>' => 'recurso/delete',
 
+                // Recurso Entidad Descripcion
+                'recurso-descripcion' => 'recurso-descripcion/index',
+                'recurso-descripcion/view/<id>' => 'recurso-descripcion/view',
+                'recurso-descripcion/create' => 'recurso-descripcion/create',
+                'recurso-descripcion/update/<id>' => 'recurso-descripcion/update',
+                'recurso-descripcion/delete/<id>' => 'recurso-descripcion/delete',
+
                 // Tipo_Asociacion
                 'tipo-asociacion' => 'tipo-asociacion/index',
                 'tipo-asociacion/view/<id>' => 'tipo-asociacion/view',
@@ -186,6 +193,21 @@ return [
 
                 // Reportes
                 'reportes/count-evaluations-profesor/<idprofesor:\d+>' => 'reportes/count-evaluations-profesor',
+                'reportes/count-evaluations-estudiante/<idestudiante:\d+>' => 'reportes/count-evaluations-estudiante',
+
+                // Tipo Asociacion Multiple
+                'tipo-asociacion-multiple' => 'tipo-asociacion-multiple/index',
+                'tipo-asociacion-multiple/view/<id>' => 'tipo-asociacion-multiple/view',
+                'tipo-asociacion-multiple/create' => 'tipo-asociacion-multiple/create',
+                'tipo-asociacion-multiple/update/<id>' => 'tipo-asociacion-multiple/update',
+                'tipo-asociacion-multiple/delete/<id>' => 'tipo-asociacion-multiple/delete',
+
+                // Asociacion Multiple
+                'asociacion-multiple' => 'asociacion-multiple/index',
+                'asociacion-multiple/view/<id>' => 'asociacion-multiple/view',
+                'asociacion-multiple/create' => 'asociacion-multiple/create',
+                'asociacion-multiple/update/<id>' => 'asociacion-multiple/update',
+                'asociacion-multiple/delete/<id>' => 'asociacion-multiple/delete',
 
                 // Begin borrar ejemplo
                 'employees' => 'employee/index',

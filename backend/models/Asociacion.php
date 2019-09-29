@@ -22,6 +22,7 @@ use Yii;
  * @property Entidad $entidad1
  * @property Entidad $entidad2
  * @property TipoAsociacion $tipoAsociacion
+ * @property AsociacionMultiple[] $asociacionMultiples
  */
 class Asociacion extends \yii\db\ActiveRecord
 {
@@ -121,6 +122,14 @@ class Asociacion extends \yii\db\ActiveRecord
     public function getTipoAsociacion()
     {
         return $this->hasOne(TipoAsociacion::className(), ['IdTipoAsociacion' => 'IdTipoAsociacion']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAsociacionMultiples()
+    {
+        return $this->hasMany(AsociacionMultiple::className(), ['IdAsociacion' => 'IdAsociacion']);
     }
 
     static public function search($params)

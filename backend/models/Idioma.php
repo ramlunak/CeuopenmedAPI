@@ -11,8 +11,7 @@ use Yii;
  * @property string $Idioma
  *
  * @property DetalleEntidad[] $detalleEntidads
- * @property Recurso[] $recursos
- * @property TipoEntidad[] $tipoEntidads
+ * @property RecursoDescripcion[] $recursoDescripcions
  */
 class Idioma extends \yii\db\ActiveRecord
 {
@@ -58,17 +57,9 @@ class Idioma extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRecursos()
+    public function getRecursoDescripcions()
     {
-        return $this->hasMany(Recurso::className(), ['IdIdioma' => 'IdIdioma']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTipoEntidads()
-    {
-        return $this->hasMany(TipoEntidad::className(), ['IdIdioma' => 'IdIdioma']);
+        return $this->hasMany(RecursoDescripcion::className(), ['IdIdioma' => 'IdIdioma']);
     }
 
     static public function search($params)
