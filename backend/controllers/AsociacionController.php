@@ -186,32 +186,7 @@ class AsociacionController extends RestController
                 AND tipo_asociacion.IdTipoEntidad1 = entidad.IdTipoEntidad)))
             ")
             ->andWhere('entidad.Estado = 1 AND entidad.Evaluacion = 1 AND entidad.IdEntidad != ' . $identidad . '')
-<<<<<<< HEAD
-           
-            ->andWhere("(SELECT IdAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) <> 'null'")
-            ->andWhere('entidad.Evaluacion = 1')
-            /*->groupBy('
-                IdEntidad, 
-                IdTipoEntidad,
-                IdEstudiante, 
-                Estudiante,
-                Entidad,
-                DetalleIdEntidad,
-                Idioma,
-                Estado,
-                Evaluacion,
-                Comentario,
-                IdProfesor,
-                IdAsociacion,
-                AsociacionIdTipoAsociacion,
-                IdTipoAsociacion,
-                TipoAsociacion
-            ')*/
-            /*->leftJoin('doc_profesor', '`IdProfesor` = `doc_profesor`.`IdProfesor`')
-            ->leftJoin('adm_persona AS prof', '`doc_profesor`.`IdPersona` = `prof`.`IdPersona`')*/;
-=======
             ->andWhere('entidad.Evaluacion = 1');
->>>>>>> e08363ecbc5e25ae2c0fc070463a7ebc163adb95
 
         $additional_info = [
             'page' => 'No Define',
