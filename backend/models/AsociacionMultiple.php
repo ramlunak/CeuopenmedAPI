@@ -101,7 +101,10 @@ class AsociacionMultiple extends \yii\db\ActiveRecord
 
 
         $query = AsociacionMultiple::find()
-            ->select(['{{asociacion_multiple}}.*', 'TipoEntidad'])
+            ->select([
+                '{{asociacion_multiple}}.*', 'TipoEntidad', 'TipoAsociacion',
+                '(SELECT Entidad FROM detalle_entidad WHERE IdEntidad = detalle_entidad.IdEntidad LIMIT 1) AS Entidad'
+            ])
             ->leftJoin('tipo_entidad', '`asociacion_multiple`.`IdTipoEntidad` = `tipo_entidad`.`IdTipoEntidad`')
             ->leftJoin('tipo_asociacion_multiple', '`asociacion_multiple`.`IdTipoAsociacionMultiple` = `tipo_asociacion_multiple`.`IdTipoAsociacionMultiple`')
             ->asArray(true);
