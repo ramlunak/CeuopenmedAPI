@@ -15,7 +15,7 @@ use Yii;
  * @property int $IdProfesor
  * @property int $Evaluacion
  * @property int $Estado
- * @property int $Nivel
+ * @property double $Nivel
  * @property string $Comentario
  *
  * @property DocEstudiante $estudiante
@@ -42,7 +42,8 @@ class Asociacion extends \yii\db\ActiveRecord
     {
         return [
             [['IdEntidad1', 'IdEntidad2', 'IdTipoAsociacion', 'IdEstudiante', 'Estado'], 'required'],
-            [['IdEntidad1', 'IdEntidad2', 'IdTipoAsociacion', 'IdEstudiante', 'IdProfesor', 'Evaluacion', 'Estado', 'Nivel'], 'integer'],
+            [['Nivel'], 'double'],
+            [['IdEntidad1', 'IdEntidad2', 'IdTipoAsociacion', 'IdEstudiante', 'IdProfesor', 'Evaluacion', 'Estado'], 'integer'],
             [['Comentario'], 'string'],
             [
                 ['IdEstudiante'], 'exist', 'skipOnError' => true, 'targetClass' => DocEstudiante::className(),
