@@ -82,9 +82,9 @@ class Apiauth extends AuthMethod
         }
         if ($accessToken !== null) {
             
-            Yii::$app->api->sendFailedResponse('Token de Acceso Inválido', 401);
+            //Yii::$app->api->sendFailedResponse('Token de Acceso Inválido', 401);
 
-            // $this->handleFailure($response);
+             $this->handleFailure($response);
         }
 
 
