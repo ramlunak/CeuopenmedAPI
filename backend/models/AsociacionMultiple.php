@@ -34,6 +34,8 @@ class AsociacionMultiple extends \yii\db\ActiveRecord
     {
         return [
             [['IdAsociacion'], 'required'],
+            [['Nivel'], 'double'],
+            [['Comentario'], 'string'],
             [['IdAsociacion', 'IdEntidad', 'IdTipoEntidad', 'IdTipoAsociacionMultiple'], 'integer'],
             [
                 ['IdAsociacion'], 'exist', 'skipOnError' => true, 'targetClass' => Asociacion::className(),
@@ -62,6 +64,8 @@ class AsociacionMultiple extends \yii\db\ActiveRecord
             'IdEntidad' => 'Id Entidad',
             'IdTipoEntidad' => 'Id Tipo Entidad',
             'IdTipoAsociacionMultiple' => 'Id Tipo Asociación Múltiple',
+            'Nivel' => 'Nivel',
+            'Comentario' => 'Comentario',
         ];
     }
 
@@ -128,7 +132,12 @@ class AsociacionMultiple extends \yii\db\ActiveRecord
         if (isset($params['IdTipoAsociacionMultiple'])) {
             $query->andFilterWhere(['IdTipoAsociacionMultiple' => $params['IdTipoAsociacionMultiple']]);
         }
-
+        if (isset($params['Nivel'])) {
+            $query->andFilterWhere(['Nivel' => $params['Nivel']]);
+        }
+        if (isset($params['Comentario'])) {
+            $query->andFilterWhere(['like', 'Comentario', $params['Comentario']]);
+        }
 
         if (isset($order)) {
             $query->orderBy($order);
