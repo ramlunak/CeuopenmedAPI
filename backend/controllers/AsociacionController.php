@@ -165,6 +165,7 @@ class AsociacionController extends RestController
                 '(SELECT Entidad FROM detalle_entidad WHERE Entidad.IdEntidad = detalle_entidad.IdEntidad LIMIT 1) AS Entidad',
                 "(SELECT IdIdioma FROM detalle_entidad WHERE Entidad.IdEntidad = detalle_entidad.IdEntidad LIMIT 1) AS DetalleIdEntidad",
                 "(SELECT idioma FROM Idioma WHERE IdIdioma = DetalleIdEntidad LIMIT 1) AS Idioma",
+                "(SELECT TipoEntidad FROM tipo_entidad WHERE IdTipoEntidad = entidad.IdTipoEntidad LIMIT 1) AS TipoEntidad",
                 "(SELECT Estado FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as Estado",
                 "(SELECT Evaluacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as Evaluacion",
                 "(SELECT Comentario FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as Comentario",
@@ -188,7 +189,8 @@ class AsociacionController extends RestController
                 AND tipo_asociacion.IdTipoEntidad1 = entidad.IdTipoEntidad)))
             ")
             ->andWhere('entidad.Estado = 1 AND entidad.Evaluacion = 1 AND entidad.IdEntidad != ' . $identidad . '')
-            ->andWhere('entidad.Evaluacion = 1');
+            ->andWhere('entidad.Evaluacion = 1')
+            ->andWhere("(SELECT IdAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad ." AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = ". $identidad ." AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) > 0");
 
         $additional_info = [
             'page' => 'No Define',
