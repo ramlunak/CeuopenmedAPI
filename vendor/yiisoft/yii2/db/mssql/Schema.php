@@ -8,7 +8,6 @@
 namespace yii\db\mssql;
 
 use yii\db\CheckConstraint;
-use yii\db\ColumnSchema;
 use yii\db\Constraint;
 use yii\db\ConstraintFinderInterface;
 use yii\db\ConstraintFinderTrait;
@@ -29,6 +28,10 @@ class Schema extends \yii\db\Schema implements ConstraintFinderInterface
     use ViewFinderTrait;
     use ConstraintFinderTrait;
 
+    /**
+     * {@inheritdoc}
+     */
+    public $columnSchemaClass = 'yii\db\mssql\ColumnSchema';
     /**
      * @var string the default schema used for the current session.
      */
@@ -394,7 +397,7 @@ SQL;
             $info['column_default'] = null;
         }
         if (!$column->isPrimaryKey && ($column->type !== 'timestamp' || $info['column_default'] !== 'CURRENT_TIMESTAMP')) {
-            $column->defaultValue = $column->phpTypecast($info['column_default']);
+            $column->defaultValue = $column->defaultPhpTypecast($info['column_default']);
         }
 
         return $column;
@@ -408,7 +411,7 @@ SQL;
     protected function findColumns($table)
     {
         $columnsTableName = 'INFORMATION_SCHEMA.COLUMNS';
-        $whereSql = "[t1].[table_name] = '{$table->name}'";
+        $whereSql = "[t1].[table_name] = " . $this->db->quoteValue($table->name);
         if ($table->catalogName !== null) {
             $columnsTableName = "{$table->catalogName}.{$columnsTableName}";
             $whereSql .= " AND [t1].[table_catalog] = '{$table->catalogName}'";
@@ -569,7 +572,10 @@ SQL;
 
         $table->foreignKeys = [];
         foreach ($rows as $row) {
-            $table->foreignKeys[$row['fk_name']] = [$row['uq_table_name'], $row['fk_column_name'] => $row['uq_column_name']];
+            if (!isset($table->foreignKeys[$row['fk_name']])) {
+                $table->foreignKeys[$row['fk_name']][] = $row['uq_table_name'];
+            }
+            $table->foreignKeys[$row['fk_name']][$row['fk_column_name']] = $row['uq_column_name'];
         }
     }
 
@@ -732,5 +738,17 @@ SQL;
         }
 
         return $result[$returnType];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function quoteColumnName($name)
+    {
+        if (preg_match('/^\[.*\]$/', $name)) {
+            return $name;
+        }
+
+        return parent::quoteColumnName($name);
     }
 }

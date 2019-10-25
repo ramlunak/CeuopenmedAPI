@@ -43,7 +43,11 @@ class ApplicationDescription
      */
     private $aliases;
 
-    public function __construct(Application $application, string $namespace = null, bool $showHidden = false)
+    /**
+     * @param string|null $namespace
+     * @param bool        $showHidden
+     */
+    public function __construct(Application $application, $namespace = null, $showHidden = false)
     {
         $this->application = $application;
         $this->namespace = $namespace;
@@ -118,7 +122,10 @@ class ApplicationDescription
         }
     }
 
-    private function sortCommands(array $commands): array
+    /**
+     * @return array
+     */
+    private function sortCommands(array $commands)
     {
         $namespacedCommands = [];
         $globalCommands = [];

@@ -38,12 +38,22 @@ class InputArgumentTest extends TestCase
     }
 
     /**
-     * @expectedException        \InvalidArgumentException
-     * @expectedExceptionMessage Argument mode "-1" is not valid.
+     * @dataProvider provideInvalidModes
      */
-    public function testInvalidModes()
+    public function testInvalidModes($mode)
     {
-        new InputArgument('foo', '-1');
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(sprintf('Argument mode "%s" is not valid.', $mode));
+
+        new InputArgument('foo', $mode);
+    }
+
+    public function provideInvalidModes()
+    {
+        return [
+            ['ANOTHER_ONE'],
+            [-1],
+        ];
     }
 
     public function testIsArray()
@@ -81,22 +91,18 @@ class InputArgumentTest extends TestCase
         $this->assertEquals([1, 2], $argument->getDefault(), '->setDefault() changes the default value');
     }
 
-    /**
-     * @expectedException        \LogicException
-     * @expectedExceptionMessage Cannot set a default value except for InputArgument::OPTIONAL mode.
-     */
     public function testSetDefaultWithRequiredArgument()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('Cannot set a default value except for InputArgument::OPTIONAL mode.');
         $argument = new InputArgument('foo', InputArgument::REQUIRED);
         $argument->setDefault('default');
     }
 
-    /**
-     * @expectedException        \LogicException
-     * @expectedExceptionMessage A default value for an array argument must be an array.
-     */
     public function testSetDefaultWithArrayArgument()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('A default value for an array argument must be an array.');
         $argument = new InputArgument('foo', InputArgument::IS_ARRAY);
         $argument->setDefault('default');
     }

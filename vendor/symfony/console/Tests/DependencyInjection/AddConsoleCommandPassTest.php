@@ -33,27 +33,28 @@ class AddConsoleCommandPassTest extends TestCase
         $container->addCompilerPass(new AddConsoleCommandPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->setParameter('my-command.class', 'Symfony\Component\Console\Tests\DependencyInjection\MyCommand');
 
-        $id = 'my-command';
         $definition = new Definition('%my-command.class%');
         $definition->setPublic($public);
         $definition->addTag('console.command');
-        $container->setDefinition($id, $definition);
+        $container->setDefinition('my-command', $definition);
 
         $container->compile();
 
-        $alias = 'console.command.public_alias.my-command';
+        $alias = 'console.command.symfony_component_console_tests_dependencyinjection_mycommand';
 
         if ($public) {
             $this->assertFalse($container->hasAlias($alias));
+            $id = 'my-command';
         } else {
+            $id = $alias;
             // The alias is replaced by a Definition by the ReplaceAliasByActualDefinitionPass
             // in case the original service is private
-            $this->assertFalse($container->hasDefinition($id));
+            $this->assertFalse($container->hasDefinition('my-command'));
             $this->assertTrue($container->hasDefinition($alias));
         }
 
         $this->assertTrue($container->hasParameter('console.command.ids'));
-        $this->assertSame([$public ? $id : $alias], $container->getParameter('console.command.ids'));
+        $this->assertSame([$alias => $id], $container->getParameter('console.command.ids'));
     }
 
     public function testProcessRegistersLazyCommands()
@@ -74,7 +75,8 @@ class AddConsoleCommandPassTest extends TestCase
         $this->assertSame(ContainerCommandLoader::class, $commandLoader->getClass());
         $this->assertSame(['my:command' => 'my-command', 'my:alias' => 'my-command'], $commandLoader->getArgument(1));
         $this->assertEquals([['my-command' => new ServiceClosureArgument(new TypedReference('my-command', MyCommand::class))]], $commandLocator->getArguments());
-        $this->assertSame([], $container->getParameter('console.command.ids'));
+        $this->assertSame(['console.command.symfony_component_console_tests_dependencyinjection_mycommand' => 'my-command'], $container->getParameter('console.command.ids'));
+        $this->assertSame(['my-command' => true], $container->getParameter('console.lazy_command.ids'));
         $this->assertSame([['setName', ['my:command']], ['setAliases', [['my:alias']]]], $command->getMethodCalls());
     }
 
@@ -96,7 +98,8 @@ class AddConsoleCommandPassTest extends TestCase
         $this->assertSame(ContainerCommandLoader::class, $commandLoader->getClass());
         $this->assertSame(['default' => 'with-default-name'], $commandLoader->getArgument(1));
         $this->assertEquals([['with-default-name' => new ServiceClosureArgument(new TypedReference('with-default-name', NamedCommand::class))]], $commandLocator->getArguments());
-        $this->assertSame([], $container->getParameter('console.command.ids'));
+        $this->assertSame(['console.command.symfony_component_console_tests_dependencyinjection_namedcommand' => 'with-default-name'], $container->getParameter('console.command.ids'));
+        $this->assertSame(['with-default-name' => true], $container->getParameter('console.lazy_command.ids'));
 
         $container = new ContainerBuilder();
         $container
@@ -118,12 +121,10 @@ class AddConsoleCommandPassTest extends TestCase
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The service "my-command" tagged "console.command" must not be abstract.
-     */
     public function testProcessThrowAnExceptionIfTheServiceIsAbstract()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The service "my-command" tagged "console.command" must not be abstract.');
         $container = new ContainerBuilder();
         $container->setResourceTracking(false);
         $container->addCompilerPass(new AddConsoleCommandPass(), PassConfig::TYPE_BEFORE_REMOVING);
@@ -136,12 +137,10 @@ class AddConsoleCommandPassTest extends TestCase
         $container->compile();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The service "my-command" tagged "console.command" must be a subclass of "Symfony\Component\Console\Command\Command".
-     */
     public function testProcessThrowAnExceptionIfTheServiceIsNotASubclassOfCommand()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The service "my-command" tagged "console.command" must be a subclass of "Symfony\Component\Console\Command\Command".');
         $container = new ContainerBuilder();
         $container->setResourceTracking(false);
         $container->addCompilerPass(new AddConsoleCommandPass(), PassConfig::TYPE_BEFORE_REMOVING);
@@ -169,9 +168,10 @@ class AddConsoleCommandPassTest extends TestCase
 
         (new AddConsoleCommandPass())->process($container);
 
-        $aliasPrefix = 'console.command.public_alias.';
-        $this->assertTrue($container->hasAlias($aliasPrefix.'my-command1'));
-        $this->assertTrue($container->hasAlias($aliasPrefix.'my-command2'));
+        $alias1 = 'console.command.symfony_component_console_tests_dependencyinjection_mycommand';
+        $alias2 = $alias1.'_my-command2';
+        $this->assertTrue($container->hasAlias($alias1));
+        $this->assertTrue($container->hasAlias($alias2));
     }
 
     public function testProcessOnChildDefinitionWithClass()
@@ -223,12 +223,10 @@ class AddConsoleCommandPassTest extends TestCase
         $this->assertInstanceOf($className, $command);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage The definition for "my-child-command" has no class.
-     */
     public function testProcessOnChildDefinitionWithoutClass()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('The definition for "my-child-command" has no class.');
         $container = new ContainerBuilder();
         $container->addCompilerPass(new AddConsoleCommandPass(), PassConfig::TYPE_BEFORE_REMOVING);
 
