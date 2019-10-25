@@ -93,6 +93,7 @@ class Apiauth extends AuthMethod
 
     public function beforeAction($action)
     {
+
         //echo "okk";
         //exit;
 

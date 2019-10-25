@@ -32,7 +32,7 @@ class TipoEntidad extends \yii\db\ActiveRecord
     {
         return [
             [['TipoEntidad'], 'required'],
-            [['TipoEntidad'], 'string', 'max' => 100],
+            [['TipoEntidad'], 'string'],
             [['TipoEntidad'], 'unique'],
         ];
     }

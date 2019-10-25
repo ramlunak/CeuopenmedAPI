@@ -33,8 +33,8 @@ class Employee extends \yii\db\ActiveRecord
             [['email'],'email'],
             [['email'],'unique'],
             [['created_at', 'updated_at'], 'safe'],
-            [['name'], 'string', 'max' => 200],
-            [['email'], 'string', 'max' => 100],
+            [['name'], 'string'],
+            [['email'], 'string'],
         ];
     }
 

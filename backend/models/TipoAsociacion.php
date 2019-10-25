@@ -34,7 +34,7 @@ class TipoAsociacion extends \yii\db\ActiveRecord
         return [
             [['IdTipoEntidad1', 'IdTipoEntidad2', 'TipoAsociacion'], 'required'],
             [['IdTipoEntidad1', 'IdTipoEntidad2'], 'integer'],
-            [['TipoAsociacion'], 'string', 'max' => 45],           
+            [['TipoAsociacion'], 'string'],           
             [
                 ['IdTipoEntidad1'], 'exist', 'skipOnError' => true, 'targetClass' => TipoEntidad::className(),
                 'targetAttribute' => ['IdTipoEntidad1' => 'IdTipoEntidad'], 'message' => 'El tipo entidad que seleccionó no existe en la Base de Datos del Sistema.'

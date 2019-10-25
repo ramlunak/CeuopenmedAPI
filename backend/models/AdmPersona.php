@@ -34,7 +34,7 @@ class AdmPersona extends ActiveRecord
     {
         return [
             [['PrimerNombre', 'ApellidoPaterno', 'ApellidoMaterno'], 'required'],
-            [['PrimerNombre', 'SegundoNombre', 'ApellidoPaterno', 'ApellidoMaterno'], 'string', 'max' => 45],
+            [['PrimerNombre', 'SegundoNombre', 'ApellidoPaterno', 'ApellidoMaterno'], 'string'],
         ];
     }
 

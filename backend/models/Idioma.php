@@ -30,7 +30,7 @@ class Idioma extends \yii\db\ActiveRecord
     {
         return [
             [['Idioma'], 'required'],
-            [['Idioma'], 'string', 'max' => 100],
+            [['Idioma'], 'string'],
             [['Idioma'], 'unique'],
         ];
     }

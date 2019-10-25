@@ -130,9 +130,14 @@ class EntidadController extends RestController
                 '{{entidad}}.*',
                 "CONCAT(est.PrimerNombre, ' ', IFNULL(est.SegundoNombre, ''), 
                 ' ', est.ApellidoPaterno, ' ', est.ApellidoMaterno) AS Estudiante",
-                '(SELECT Entidad FROM detalle_entidad WHERE Entidad.IdEntidad = detalle_entidad.IdEntidad LIMIT 1) AS Entidad',
-                '(SELECT IdIdioma FROM detalle_entidad WHERE Entidad.IdEntidad = detalle_entidad.IdEntidad LIMIT 1) AS DetalleIdEntidad',
-                '(SELECT idioma FROM Idioma WHERE IdIdioma = DetalleIdEntidad LIMIT 1) AS Idioma',
+                '(SELECT Entidad FROM detalle_entidad WHERE entidad.IdEntidad = detalle_entidad.IdEntidad LIMIT 1) AS Entidad',
+                '(SELECT IdIdioma FROM detalle_entidad WHERE entidad.IdEntidad = detalle_entidad.IdEntidad LIMIT 1) AS DetalleIdEntidad',
+                '(SELECT idioma FROM idioma WHERE IdIdioma = DetalleIdEntidad LIMIT 1) AS Idioma',
+                '(SELECT COUNT(IdAsociacion)
+                FROM asociacion
+                WHERE (asociacion.IdEntidad1 = IdEntidad AND (SELECT Estado FROM entidad WHERE entidad.IdEntidad = asociacion.IdEntidad2 LIMIT 1) = 1)
+                OR ( asociacion.IdEntidad2 = IdEntidad AND (SELECT Estado FROM entidad WHERE entidad.IdEntidad = asociacion.IdEntidad1 LIMIT 1) = 1)
+                AND asociacion.Estado = 0) as countAsociaciones',
                 '(SELECT TipoEntidad FROM tipo_entidad WHERE IdTipoEntidad = entidad.IdTipoEntidad LIMIT 1) AS TipoEntidad',
             ])
             ->from('doc_profesor_has_doc_grupo, doc_estudiante,entidad, adm_persona AS est')

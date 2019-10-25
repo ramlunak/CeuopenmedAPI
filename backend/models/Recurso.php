@@ -35,7 +35,7 @@ class Recurso extends \yii\db\ActiveRecord
             [['IdEntidad', 'Nivel', 'URL'], 'required'],
             [['IdEntidad', 'Nivel'], 'integer'],
             [['IsImage'], 'boolean'],
-            [['URL'], 'string', 'max' => 255],
+            [['URL'], 'string'],
             [
                 ['IdEntidad'], 'exist', 'skipOnError' => true, 'targetClass' => Entidad::className(),
                 'targetAttribute' => ['IdEntidad' => 'IdEntidad'], 'message' => 'La Entidad que seleccionó no existe en la Base de Datos del Sistema.'
