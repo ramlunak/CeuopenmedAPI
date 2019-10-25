@@ -145,7 +145,9 @@ class EntidadController extends RestController
             ->andWhere('entidad.IdEstudiante = doc_estudiante.IdEstudiante')
             ->andWhere('est.IdPersona = doc_estudiante.IdPersona')
             ->andFilterWhere(['doc_profesor_has_doc_grupo.IdProfesor' => $idprofesor])
-            ->andFilterWhere(['entidad.Estado' => $estado]);
+            ->andFilterWhere(['entidad.Estado' => $estado])
+            ->orderBy('countAsociaciones DESC');
+          
 
         $additional_info = [
             'page' => 'No Define',
@@ -158,5 +160,9 @@ class EntidadController extends RestController
             'info' => $additional_info
         ];
         Yii::$app->api->sendSuccessResponse($response['data'], $response['info']);
-    }
+    }    
+
+ 
+
+
 }

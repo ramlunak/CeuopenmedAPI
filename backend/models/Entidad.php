@@ -151,6 +151,16 @@ class Entidad extends \yii\db\ActiveRecord
                 ' ', est.ApellidoPaterno, ' ', est.ApellidoMaterno) AS Estudiante",
                 "CONCAT(prof.PrimerNombre, ' ', IFNULL(prof.SegundoNombre, ''), 
                 ' ', prof.ApellidoPaterno, ' ', prof.ApellidoMaterno) AS Profesor",
+                '(SELECT COUNT(IdAsociacion)
+                FROM asociacion
+                WHERE ((asociacion.IdEntidad1 = entidad.IdEntidad AND (SELECT Estado FROM entidad WHERE entidad.IdEntidad = asociacion.IdEntidad2 LIMIT 1) = 1)
+                OR ( asociacion.IdEntidad2 = entidad.IdEntidad AND (SELECT Estado FROM entidad WHERE entidad.IdEntidad = asociacion.IdEntidad1 LIMIT 1) = 1))
+                AND asociacion.Estado = 0) as countAsociacionesEspera',   
+                '(SELECT COUNT(IdAsociacion)
+                FROM asociacion
+                WHERE ((asociacion.IdEntidad1 = entidad.IdEntidad AND (SELECT Estado FROM entidad WHERE entidad.IdEntidad = asociacion.IdEntidad2 LIMIT 1) = 1)
+                OR ( asociacion.IdEntidad2 = entidad.IdEntidad AND (SELECT Estado FROM entidad WHERE entidad.IdEntidad = asociacion.IdEntidad1 LIMIT 1) = 1))
+                AND asociacion.Estado = 1 AND asociacion.Evaluacion = 0) as countAsociacionesMal',                 
                 'TipoEntidad', 'IdRecurso', 'detalle_entidad.IdIdioma', 'Entidad', 'detalle_entidad.Nivel', 'Idioma'
             ])
             ->distinct()
@@ -161,6 +171,7 @@ class Entidad extends \yii\db\ActiveRecord
             ->leftJoin('adm_persona AS est', '`doc_estudiante`.`IdPersona` = `est`.`IdPersona`')
             ->leftJoin('doc_profesor', '`entidad`.`IdProfesor` = `doc_profesor`.`IdProfesor`')
             ->leftJoin('adm_persona AS prof', '`doc_profesor`.`IdPersona` = `prof`.`IdPersona`')
+            ->orderBy('countAsociacionesMal DESC')
             ->asArray(true);
 
 
