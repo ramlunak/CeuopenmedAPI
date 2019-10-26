@@ -174,7 +174,6 @@ class Entidad extends \yii\db\ActiveRecord
             ->orderBy('countAsociacionesMal DESC')
             ->asArray(true);
 
-
         if (isset($params['IdEntidad'])) {
             $query->andFilterWhere(['entidad.IdEntidad' => $params['IdEntidad']]);
         }
@@ -199,7 +198,6 @@ class Entidad extends \yii\db\ActiveRecord
         if (isset($params['Comentario'])) {
             $query->andFilterWhere(['like', 'Comentario', $params['Comentario']]);
         }
-
 
         if (isset($order)) {
             $query->orderBy($order);

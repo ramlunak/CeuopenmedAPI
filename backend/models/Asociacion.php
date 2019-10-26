@@ -145,7 +145,6 @@ class Asociacion extends \yii\db\ActiveRecord
             $params = $search;
         }
 
-
         $query = Asociacion::find()
             ->select([
                 '{{asociacion}}.*', "CONCAT(est.PrimerNombre, ' ', IFNULL(est.SegundoNombre, ''), 
