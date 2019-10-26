@@ -130,8 +130,8 @@ class AsociacionController extends RestController
             ->distinct('entidad.IdEntidad')
             ->from('doc_profesor_has_doc_grupo,doc_estudiante,entidad,adm_persona AS est,tipo_asociacion')
             ->where('doc_profesor_has_doc_grupo.IdGrupo = doc_estudiante.IdGrupo')
-            ->andWhere('entidad.IdEstudiante = doc_estudiante.IdEstudiante')
-            ->andWhere('est.IdPersona = doc_estudiante.IdPersona')
+           // ->andWhere('entidad.IdEstudiante = doc_estudiante.IdEstudiante')
+           // ->andWhere('est.IdPersona = doc_estudiante.IdPersona')
             ->andWhere("
                 (((tipo_asociacion.IdTipoEntidad1 = (SELECT IdTipoEntidad FROM entidad WHERE IdEntidad = " . $identidad . ") 
                 AND tipo_asociacion.IdTipoEntidad2 = entidad.IdTipoEntidad ) 
