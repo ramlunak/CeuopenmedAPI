@@ -104,8 +104,7 @@ class TipoAsociacionController extends RestController
             ->andWhere("
                 (((tipo_asociacion.IdTipoEntidad1 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idEntidad1 . " LIMIT 1) 
                     AND tipo_asociacion.IdTipoEntidad2 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idEntidad2 . " LIMIT 1) ) 
-                OR (tipo_asociacion.IdTipoEntidad2 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idEntidad1 . " LIMIT 1) 
-                    AND tipo_asociacion.IdTipoEntidad1 = (SELECT entidad.IdTipoEntidad FROM entidad WHERE entidad.IdEntidad = " . $idEntidad2 . " LIMIT 1))))")
+               ))")
             ->asArray(true);
             
         $additional_info = [

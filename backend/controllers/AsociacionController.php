@@ -116,28 +116,28 @@ class AsociacionController extends RestController
                 "(SELECT IdIdioma FROM detalle_entidad WHERE entidad.IdEntidad = detalle_entidad.IdEntidad LIMIT 1) AS DetalleIdEntidad",
                 "(SELECT idioma FROM idioma WHERE IdIdioma = DetalleIdEntidad LIMIT 1) AS Idioma",
                 "(SELECT TipoEntidad FROM tipo_entidad WHERE IdTipoEntidad = entidad.IdTipoEntidad LIMIT 1) AS TipoEntidad",
-                "(SELECT Estado FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as Estado",
-                "(SELECT Evaluacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as Evaluacion",
-                "(SELECT Comentario FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as Comentario",
-                "(SELECT Nivel FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as Nivel",
-                "(SELECT IdProfesor FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as IdProfesor",
-                "(SELECT IdAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as IdAsociacion",
-                "(SELECT IdTipoAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as asociacionIdTipoAsociacion",
-                "(SELECT IdTipoAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as IdTipoAsociacion",
+                "(SELECT Estado FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) as Estado",
+                "(SELECT Evaluacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) as Evaluacion",
+                "(SELECT Comentario FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) as Comentario",
+                "(SELECT Nivel FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) as Nivel",
+                "(SELECT IdProfesor FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) LIMIT 1) as IdProfesor",
+                "(SELECT IdAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) as IdAsociacion",
+                "(SELECT IdTipoAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) LIMIT 1) as asociacionIdTipoAsociacion",
+                "(SELECT IdTipoAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) as IdTipoAsociacion",
                 "(SELECT TipoAsociacion FROM tipo_asociacion WHERE IdTipoAsociacion = asociacionIdTipoAsociacion) as TipoAsociacion",
                 
             ])
             ->distinct('entidad.IdEntidad')
             ->from('doc_profesor_has_doc_grupo,doc_estudiante,entidad,adm_persona AS est,tipo_asociacion')
             ->where('doc_profesor_has_doc_grupo.IdGrupo = doc_estudiante.IdGrupo')
-           // ->andWhere('entidad.IdEstudiante = doc_estudiante.IdEstudiante')
-           // ->andWhere('est.IdPersona = doc_estudiante.IdPersona')
+            ->andWhere('entidad.IdEstudiante = doc_estudiante.IdEstudiante')
+            ->andWhere('est.IdPersona = doc_estudiante.IdPersona')
             ->andWhere("
                 (((tipo_asociacion.IdTipoEntidad1 = (SELECT IdTipoEntidad FROM entidad WHERE IdEntidad = " . $identidad . ") 
                 AND tipo_asociacion.IdTipoEntidad2 = entidad.IdTipoEntidad ) 
-                OR (tipo_asociacion.IdTipoEntidad2 = (SELECT IdTipoEntidad FROM entidad WHERE IdEntidad = " . $identidad . ") 
-                AND tipo_asociacion.IdTipoEntidad1 = entidad.IdTipoEntidad)))
-            ");
+                ))
+            ")
+            ->andWhere("entidad.IdEntidad != " . $identidad . "");
 
         $additional_info = [
             'page' => 'No Define',
@@ -166,14 +166,14 @@ class AsociacionController extends RestController
                 "(SELECT IdIdioma FROM detalle_entidad WHERE entidad.IdEntidad = detalle_entidad.IdEntidad LIMIT 1) AS DetalleIdEntidad",
                 "(SELECT idioma FROM idioma WHERE IdIdioma = DetalleIdEntidad LIMIT 1) AS Idioma",
                 "(SELECT TipoEntidad FROM tipo_entidad WHERE IdTipoEntidad = entidad.IdTipoEntidad LIMIT 1) AS TipoEntidad",
-                "(SELECT Estado FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as Estado",
-                "(SELECT Evaluacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as Evaluacion",
-                "(SELECT Comentario FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as Comentario",
-                "(SELECT Nivel FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as Nivel",
-                "(SELECT IdProfesor FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as IdProfesor",
-                "(SELECT IdAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as IdAsociacion",
-                "(SELECT IdTipoAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as AsociacionIdTipoAsociacion",
-                "(SELECT IdTipoAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) as IdTipoAsociacion",
+                "(SELECT Estado FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) as Estado",
+                "(SELECT Evaluacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) as Evaluacion",
+                "(SELECT Comentario FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) LIMIT 1) as Comentario",
+                "(SELECT Nivel FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) as Nivel",
+                "(SELECT IdProfesor FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) as IdProfesor",
+                "(SELECT IdAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) LIMIT 1) as IdAsociacion",
+                "(SELECT IdTipoAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) as AsociacionIdTipoAsociacion",
+                "(SELECT IdTipoAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) as IdTipoAsociacion",
                 "(SELECT TipoAsociacion FROM tipo_asociacion WHERE IdTipoAsociacion = asociacionIdTipoAsociacion) as TipoAsociacion",
 
             ])
@@ -185,12 +185,11 @@ class AsociacionController extends RestController
             ->andWhere("
                 (((tipo_asociacion.IdTipoEntidad1 = (SELECT IdTipoEntidad FROM entidad WHERE IdEntidad = " . $identidad . ") 
                 AND tipo_asociacion.IdTipoEntidad2 = entidad.IdTipoEntidad ) 
-                OR (tipo_asociacion.IdTipoEntidad2 = (SELECT IdTipoEntidad FROM entidad WHERE IdEntidad = " . $identidad . ") 
-                AND tipo_asociacion.IdTipoEntidad1 = entidad.IdTipoEntidad)))
+                ))
             ")
             ->andWhere('entidad.Estado = 1 AND entidad.Evaluacion = 1 AND entidad.IdEntidad != ' . $identidad . '')
             ->andWhere('entidad.Evaluacion = 1')
-            ->andWhere("(SELECT IdAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad ." AND IdEntidad2 = entidad.IdEntidad ) OR (IdEntidad2 = ". $identidad ." AND IdEntidad1 = entidad.IdEntidad) LIMIT 1) > 0");
+            ->andWhere("(SELECT IdAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad ." AND IdEntidad2 = entidad.IdEntidad ) LIMIT 1) > 0");
 
         $additional_info = [
             'page' => 'No Define',
