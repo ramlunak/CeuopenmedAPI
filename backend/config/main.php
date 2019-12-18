@@ -189,6 +189,7 @@ return [
                 'asociacion/update/<id>' => 'asociacion/update',
                 'asociacion/delete/<id>' => 'asociacion/delete',
                 'asociacion/associate-entitys/<identidad:\d+>' => 'asociacion/associate-entitys',
+                'asociacion/lista/<identidad:\d+>/<identidad2:\d+>' => 'asociacion/lista',
                 'asociacion/evaluated-associate-entitys/<identidad:\d+>' => 'asociacion/evaluated-associate-entitys',
 
                 // Reportes

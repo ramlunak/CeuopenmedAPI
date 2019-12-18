@@ -180,9 +180,9 @@ class Entidad extends \yii\db\ActiveRecord
         if (isset($params['IdTipoEntidad'])) {
             $query->andFilterWhere(['entidad.IdTipoEntidad' => $params['IdTipoEntidad']]);
         }        
-        if (isset($params['IdEstudiante'])) {
-            $query->andFilterWhere(['entidad.IdEstudiante' => $params['IdEstudiante']]);
-        }
+         if (isset($params['IdEstudiante'])) {
+             $query->andFilterWhere(['entidad.IdEstudiante' => $params['IdEstudiante']]);
+         }
         if (isset($params['IdProfesor'])) {
             $query->andFilterWhere(['entidad.IdProfesor' => $params['IdProfesor']]);
         }
