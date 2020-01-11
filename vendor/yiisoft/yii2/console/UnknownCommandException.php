@@ -76,18 +76,21 @@ class UnknownCommandException extends Exception
         $availableActions = [];
         foreach ($helpController->getCommands() as $command) {
             $result = $this->application->createController($command);
-            /** @var $controller Controller */
-            list($controller, $actionID) = $result;
-            if ($controller->createAction($controller->defaultAction) !== null) {
-                // add the command itself (default action)
-                $availableActions[] = $command;
+            if ($result === false) {
+                continue;
             }
+            // add the command itself (default action)
+            $availableActions[] = $command;
 
             // add all actions of this controller
+            /** @var $controller Controller */
+            list($controller, $actionID) = $result;
             $actions = $helpController->getActions($controller);
-            $prefix = $controller->getUniqueId();
-            foreach ($actions as $action) {
-                $availableActions[] = $prefix . '/' . $action;
+            if (!empty($actions)) {
+                $prefix = $controller->getUniqueId();
+                foreach ($actions as $action) {
+                    $availableActions[] = $prefix . '/' . $action;
+                }
             }
         }
 

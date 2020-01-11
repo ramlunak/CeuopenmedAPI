@@ -138,10 +138,12 @@ class CommandTesterTest extends TestCase
         $this->assertEquals(implode('', $questions), $tester->getDisplay(true));
     }
 
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Aborted.
+     */
     public function testCommandWithWrongInputsNumber()
     {
-        $this->expectException('RuntimeException');
-        $this->expectExceptionMessage('Aborted.');
         $questions = [
             'What\'s your name?',
             'How are you?',
@@ -163,10 +165,12 @@ class CommandTesterTest extends TestCase
         $tester->execute([]);
     }
 
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Aborted.
+     */
     public function testCommandWithQuestionsButNoInputs()
     {
-        $this->expectException('RuntimeException');
-        $this->expectExceptionMessage('Aborted.');
         $questions = [
             'What\'s your name?',
             'How are you?',
@@ -196,7 +200,7 @@ class CommandTesterTest extends TestCase
         ];
 
         $command = new Command('foo');
-        $command->setCode(function ($input, $output) use ($questions) {
+        $command->setCode(function ($input, $output) use ($questions, $command) {
             $io = new SymfonyStyle($input, $output);
             $io->ask($questions[0]);
             $io->ask($questions[1]);
@@ -208,5 +212,24 @@ class CommandTesterTest extends TestCase
         $tester->execute([]);
 
         $this->assertEquals(0, $tester->getStatusCode());
+    }
+
+    public function testErrorOutput()
+    {
+        $command = new Command('foo');
+        $command->addArgument('command');
+        $command->addArgument('foo');
+        $command->setCode(function ($input, $output) {
+            $output->getErrorOutput()->write('foo');
+        }
+        );
+
+        $tester = new CommandTester($command);
+        $tester->execute(
+            ['foo' => 'bar'],
+            ['capture_stderr_separately' => true]
+        );
+
+        $this->assertSame('foo', $tester->getErrorOutput());
     }
 }

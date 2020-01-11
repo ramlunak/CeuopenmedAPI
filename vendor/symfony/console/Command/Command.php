@@ -40,8 +40,8 @@ class Command
     private $aliases = [];
     private $definition;
     private $hidden = false;
-    private $help = '';
-    private $description = '';
+    private $help;
+    private $description;
     private $ignoreValidationErrors = false;
     private $applicationDefinitionMerged = false;
     private $applicationDefinitionMergedWithArgs = false;
@@ -66,7 +66,7 @@ class Command
      *
      * @throws LogicException When the command name is empty
      */
-    public function __construct($name = null)
+    public function __construct(string $name = null)
     {
         $this->definition = new InputDefinition();
 
@@ -105,7 +105,7 @@ class Command
     /**
      * Gets the helper set.
      *
-     * @return HelperSet|null A HelperSet instance
+     * @return HelperSet A HelperSet instance
      */
     public function getHelperSet()
     {
@@ -115,7 +115,7 @@ class Command
     /**
      * Gets the application instance for this command.
      *
-     * @return Application|null An Application instance
+     * @return Application An Application instance
      */
     public function getApplication()
     {
@@ -250,7 +250,7 @@ class Command
         $input->validate();
 
         if ($this->code) {
-            $statusCode = \call_user_func($this->code, $input, $output);
+            $statusCode = ($this->code)($input, $output);
         } else {
             $statusCode = $this->execute($input, $output);
         }
@@ -277,15 +277,7 @@ class Command
         if ($code instanceof \Closure) {
             $r = new \ReflectionFunction($code);
             if (null === $r->getClosureThis()) {
-                if (\PHP_VERSION_ID < 70000) {
-                    // Bug in PHP5: https://bugs.php.net/64761
-                    // This means that we cannot bind static closures and therefore we must
-                    // ignore any errors here.  There is no way to test if the closure is
-                    // bindable.
-                    $code = @\Closure::bind($code, $this);
-                } else {
-                    $code = \Closure::bind($code, $this);
-                }
+                $code = \Closure::bind($code, $this);
             }
         }
 
@@ -347,10 +339,6 @@ class Command
      */
     public function getDefinition()
     {
-        if (null === $this->definition) {
-            throw new LogicException(sprintf('Command class "%s" is not correctly initialized. You probably forgot to call the parent constructor.', \get_class($this)));
-        }
-
         return $this->definition;
     }
 
@@ -453,7 +441,7 @@ class Command
     /**
      * Returns the command name.
      *
-     * @return string|null
+     * @return string The command name
      */
     public function getName()
     {
@@ -655,11 +643,9 @@ class Command
      *
      * It must be non-empty and parts can optionally be separated by ":".
      *
-     * @param string $name
-     *
      * @throws InvalidArgumentException When the name is invalid
      */
-    private function validateName($name)
+    private function validateName(string $name)
     {
         if (!preg_match('/^[^\:]++(\:[^\:]++)*$/', $name)) {
             throw new InvalidArgumentException(sprintf('Command name "%s" is invalid.', $name));

@@ -613,10 +613,7 @@ class Connection extends Component
         $token = 'Opening DB connection: ' . $this->dsn;
         $enableProfiling = $this->enableProfiling;
         try {
-            if ($this->enableLogging) {
-                Yii::info($token, __METHOD__);
-            }
-
+            Yii::info($token, __METHOD__);
             if ($enableProfiling) {
                 Yii::beginProfile($token, __METHOD__);
             }

@@ -81,6 +81,7 @@ class XmlDescriptor extends Descriptor
     }
 
     /**
+     * @param Application $application
      * @param string|null $namespace
      *
      * @return \DOMDocument
@@ -178,6 +179,8 @@ class XmlDescriptor extends Descriptor
 
     /**
      * Writes DOM document.
+     *
+     * @return \DOMDocument|string
      */
     private function writeDocument(\DOMDocument $dom)
     {
@@ -185,10 +188,7 @@ class XmlDescriptor extends Descriptor
         $this->write($dom->saveXML());
     }
 
-    /**
-     * @return \DOMDocument
-     */
-    private function getInputArgumentDocument(InputArgument $argument)
+    private function getInputArgumentDocument(InputArgument $argument): \DOMDocument
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
 
@@ -209,10 +209,7 @@ class XmlDescriptor extends Descriptor
         return $dom;
     }
 
-    /**
-     * @return \DOMDocument
-     */
-    private function getInputOptionDocument(InputOption $option)
+    private function getInputOptionDocument(InputOption $option): \DOMDocument
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
 

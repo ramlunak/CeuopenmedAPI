@@ -34,11 +34,12 @@ class ProgressIndicator
     private static $formats;
 
     /**
-     * @param string|null $format                  Indicator format
-     * @param int         $indicatorChangeInterval Change interval in milliseconds
-     * @param array|null  $indicatorValues         Animated indicator characters
+     * @param OutputInterface $output
+     * @param string|null     $format                  Indicator format
+     * @param int             $indicatorChangeInterval Change interval in milliseconds
+     * @param array|null      $indicatorValues         Animated indicator characters
      */
-    public function __construct(OutputInterface $output, $format = null, $indicatorChangeInterval = 100, $indicatorValues = null)
+    public function __construct(OutputInterface $output, string $format = null, int $indicatorChangeInterval = 100, array $indicatorValues = null)
     {
         $this->output = $output;
 
@@ -195,7 +196,7 @@ class ProgressIndicator
 
         $this->overwrite(preg_replace_callback("{%([a-z\-_]+)(?:\:([^%]+))?%}i", function ($matches) use ($self) {
             if ($formatter = $self::getPlaceholderFormatterDefinition($matches[1])) {
-                return \call_user_func($formatter, $self);
+                return $formatter($self);
             }
 
             return $matches[0];
@@ -218,10 +219,8 @@ class ProgressIndicator
 
     /**
      * Overwrites a previous message to the output.
-     *
-     * @param string $message The message
      */
-    private function overwrite($message)
+    private function overwrite(string $message)
     {
         if ($this->output->isDecorated()) {
             $this->output->write("\x0D\x1B[2K");

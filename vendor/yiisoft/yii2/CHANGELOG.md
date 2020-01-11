@@ -1,51 +1,6 @@
 Yii Framework 2 Change Log
 ==========================
 
-2.0.28 October 08, 2019
------------------------
-
-- Bug #17573: `Request::getUserIP()` security fix for the case when `Request::$trustedHost` and `Request::$ipHeaders` are used (kamarton)
-- Bug #17585: Fix `yii\i18n\Formatter` including the `@calendar` locale param in `Yii::t()` calls (brandonkelly)
-- Bug #17853: Fix errors in ActiveField to be properly caught when PHP 7 is used (My6UoT9)
-
-
-2.0.27 September 18, 2019
--------------------------
-
-- Bug #16610: ErrorException trace was cut when using XDebug (Izumi-kun)
-- Bug #16671: Logging in `Connection::open()` was not respecting `Connection::$enableLogging` (samdark)
-- Bug #16855: Ignore console commands that have no actions (alexeevdv)
-- Bug #17434: Fix regular expression illegal character; Repeated fix for Internet Explorer 11 AJAX redirect bug in case of 301 and 302 response codes (`XMLHttpRequest: Network Error 0x800c0008`) (kamarton)
-- Bug #17539: Fixed error when using `batch()` with `indexBy()` with MSSQL (alexkart)
-- Bug #17549: Fix `yii\db\ExpressionInterface` not supported in `yii\db\conditions\SimpleConditionBuilder` (razvanphp)
-- Enh #15526: Show valid aliases and options on invalid input in console application (samdark)
-- Enh #16826: `appendTimestamp` support was added to `View` methods `registerCssFile()` and `registerJsFile()` (onmotion)
-
-
-2.0.26 September 03, 2019
--------------------------
-
-- Bug #16305: Fix `FileValidator` mime-type validation failure because of case sensitivity (kamarton)
-- Bug #16531: Fix error in `Response::sendContent()` when `set_time_limit()` is disabled (brandonkelly)
-- Bug #17355: Fix incorrect sequence of `EVENT_AFTER_REQUEST` when using Pjax (kamarton)
-- Bug #17434: Fix Internet Explorer 11 AJAX redirect bug in case of 301 and 302 response codes (`XMLHttpRequest: Network Error 0x800c0008`) (kamarton)
-- Bug #17449: Ensure `CHECK` statement goes after `COMMENT` in MySQL `QueryBuilder::addCommentOnColumn()` (Manu311)
-- Bug #17504: Fix upsert when `$updateColumns` is `true` but there are no columns to update in the table (alexkart)
-- Bug #17507: Fix regular expression escaping and simplify condition in `Controller::createAction()` (kamarton)
-- Bug #17511: Fix IPv6 subnets matching in `IpHelper::inRange()` (kamarton)
-- Bug #17522: `DbManager::isEmptyUserId()` is now protected (samdark)
-
-
-2.0.25 August 13, 2019
-----------------------
-
-- Bug #15779: If directory path is passed to `FileHelper::unlink()` and directory has files it will not delete files in this directory on Windows now (alexkart)
-- Bug #17223: Fixed detaching a behavior event when it is a Closure instance (GHopperMSK, rob006)
-- Bug #17473: Fixed `SimpleConditionBuilder::build()` when column is not a string (alexkart)
-- Bug #17485: Reverted #17477 (samdark)
-- Bug #17486: Fixed error when using `batch()` without `$db` parameter with MSSQL (alexkart)
-
-
 2.0.24 July 30, 2019
 --------------------
 

@@ -177,9 +177,6 @@ class ActiveField extends Component
         } catch (\Exception $e) {
             ErrorHandler::convertExceptionToError($e);
             return '';
-        } catch (\Throwable $e) {
-            ErrorHandler::convertExceptionToError($e);
-            return '';
         }
     }
 

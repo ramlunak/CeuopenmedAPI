@@ -218,10 +218,6 @@ EOD;
         if (empty($uniqueNames)) {
             return $this->insert($table, $insertColumns, $params);
         }
-        if ($updateNames === []) {
-            // there are no columns to update
-            $updateColumns = false;
-        }
 
         $onCondition = ['or'];
         $quotedTableName = $this->db->quoteTableName($table);

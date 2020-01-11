@@ -291,23 +291,6 @@ class Request extends \yii\base\Request
      */
     protected function filterHeaders(HeaderCollection $headerCollection)
     {
-        $trustedHeaders = $this->getTrustedHeaders();
-
-        // remove all secure headers unless they are trusted
-        foreach ($this->secureHeaders as $secureHeader) {
-            if (!in_array($secureHeader, $trustedHeaders)) {
-                $headerCollection->remove($secureHeader);
-            }
-        }
-    }
-
-    /**
-     * Trusted headers according to the [[trustedHosts]].
-     * @return array
-     * @since 2.0.28
-     */
-    protected function getTrustedHeaders()
-    {
         // do not trust any of the [[secureHeaders]] by default
         $trustedHeaders = [];
 
@@ -327,7 +310,13 @@ class Request extends \yii\base\Request
                 }
             }
         }
-        return $trustedHeaders;
+
+        // filter all secure headers unless they are trusted
+        foreach ($this->secureHeaders as $secureHeader) {
+            if (!in_array($secureHeader, $trustedHeaders)) {
+                $headerCollection->remove($secureHeader);
+            }
+        }
     }
 
     /**
@@ -1136,76 +1125,19 @@ class Request extends \yii\base\Request
     }
 
     /**
-     * Returns the user IP address from [[ipHeaders]].
-     * @return string|null user IP address, null if not available
-     * @see $ipHeaders
-     * @since 2.0.28
-     */
-    protected function getUserIpFromIpHeaders() {
-        foreach($this->ipHeaders as $ipHeader) {
-            if ($this->headers->has($ipHeader)) {
-                $ip = $this->getUserIpFromIpHeader($this->headers->get($ipHeader));
-                if ($ip !== null) {
-                    return $ip;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
      * Returns the user IP address.
      * The IP is determined using headers and / or `$_SERVER` variables.
      * @return string|null user IP address, null if not available
      */
     public function getUserIP()
     {
-        $ip = $this->getUserIpFromIpHeaders();
-        return $ip === null ? $this->getRemoteIP() : $ip;
-    }
+        foreach ($this->ipHeaders as $ipHeader) {
+            if ($this->headers->has($ipHeader)) {
+                return trim(explode(',', $this->headers->get($ipHeader))[0]);
+            }
+        }
 
-    /**
-     * Return user IP's from IP header.
-     *
-     * @param string $ips comma separated IP list
-     * @return string|null IP as string. Null is returned if IP can not be determined from header.
-     * @see $getUserHost
-     * @see $ipHeader
-     * @see $trustedHeaders
-     * @since 2.0.28
-     */
-    protected function getUserIpFromIpHeader($ips)
-    {
-        $ips = trim($ips);
-        if ($ips === '') {
-            return null;
-        }
-        $ips = preg_split('/\s*,\s*/', $ips, -1, PREG_SPLIT_NO_EMPTY);
-        krsort($ips);
-        $validator = $this->getIpValidator();
-        $resultIp = null;
-        foreach ($ips as $ip) {
-            $validator->setRanges('any');
-            if (!$validator->validate($ip) /* checking IP format */) {
-                break;
-            }
-            $resultIp = $ip;
-            $isTrusted = false;
-            foreach ($this->trustedHosts as $trustedCidr => $trustedCidrOrHeaders) {
-                if (!is_array($trustedCidrOrHeaders)) {
-                    $trustedCidr = $trustedCidrOrHeaders;
-                }
-                $validator->setRanges($trustedCidr);
-                if ($validator->validate($ip) /* checking trusted range */) {
-                    $isTrusted = true;
-                    break;
-                }
-            }
-            if (!$isTrusted) {
-                break;
-            }
-        }
-        return $resultIp;
+        return $this->getRemoteIP();
     }
 
     /**
@@ -1215,11 +1147,13 @@ class Request extends \yii\base\Request
      */
     public function getUserHost()
     {
-        $userIp = $this->getUserIpFromIpHeaders();
-        if($userIp === null) {
-            return $this->getRemoteHost();
+        foreach ($this->ipHeaders as $ipHeader) {
+            if ($this->headers->has($ipHeader)) {
+                return gethostbyaddr(trim(explode(',', $this->headers->get($ipHeader))[0]));
+            }
         }
-        return gethostbyaddr($userIp);
+
+        return $this->getRemoteHost();
     }
 
     /**
