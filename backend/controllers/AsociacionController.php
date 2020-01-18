@@ -122,7 +122,9 @@ class AsociacionController extends RestController
                 "(SELECT Nivel FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) as Nivel",
                 "(SELECT IdProfesor FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) LIMIT 1) as IdProfesor",
                 "(SELECT IdAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) as IdAsociacion",
-                "(SELECT COUNT(IdAsociacion) FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )) as CountAsociacion",
+                "(SELECT COUNT(IdAsociacion) FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) ) as CountAsociacion",
+                "(SELECT COUNT(IdAsociacion) FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) AND Estado = 1 ) as CountAsociacionEvaluadas",
+                "(SELECT COUNT(IdAsociacion) FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) AND Estado = 0) as CountAsociacionPendientes ",
                 "(SELECT IdTipoAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) LIMIT 1) as asociacionIdTipoAsociacion",
                 "(SELECT IdTipoAsociacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) as IdTipoAsociacion",
                 "(SELECT TipoAsociacion FROM tipo_asociacion WHERE IdTipoAsociacion = asociacionIdTipoAsociacion) as TipoAsociacion",
@@ -202,7 +204,6 @@ asociacion.Evaluacion,asociacion.Estado,asociacion.Nivel,asociacion.Comentario,a
         ];
         Yii::$app->api->sendSuccessResponse($response['data'], $response['info']);
     }
-
 
     public  function actionEvaluatedAssociateEntitys($identidad)
     {
