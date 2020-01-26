@@ -140,8 +140,9 @@ class AsociacionController extends RestController
                 AND tipo_asociacion.IdTipoEntidad2 = entidad.IdTipoEntidad ) 
                 ))
             ")
+            ->andWhere("(SELECT COUNT(IdAsociacion) FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad ) ) > 0")
             ->andWhere("entidad.IdEntidad != " . $identidad . "")
-            ->orderBy('CountAsociacionPendientes DESC');
+            ->orderBy('CountAsociacionPendientes DESC,CountAsociacionEvaluadas DESC');
             
         $additional_info = [
             'page' => 'No Define',
