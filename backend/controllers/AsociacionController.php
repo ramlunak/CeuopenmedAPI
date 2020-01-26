@@ -140,8 +140,9 @@ class AsociacionController extends RestController
                 AND tipo_asociacion.IdTipoEntidad2 = entidad.IdTipoEntidad ) 
                 ))
             ")
-            ->andWhere("entidad.IdEntidad != " . $identidad . "");
-
+            ->andWhere("entidad.IdEntidad != " . $identidad . "")
+            ->orderBy('CountAsociacionPendientes DESC');
+            
         $additional_info = [
             'page' => 'No Define',
             'size' => 'No Define',
@@ -160,31 +161,31 @@ class AsociacionController extends RestController
         $this->findEntidadModel($identidad);
         $model = (new \yii\db\Query())
             ->select([
-                "asociacion.IdEntidad1,asociacion.IdAsociacion,asociacion.IdEntidad2,
-asociacion.IdTipoAsociacion,asociacion.IdEstudiante,asociacion.IdProfesor,
-asociacion.Evaluacion,asociacion.Estado,asociacion.Nivel,asociacion.Comentario,asociacion.IdTipoAsociacion as asociacionIdTipoAsociacion,
-
-(SELECT CONCAT(adm_persona.PrimerNombre, ' ', IFNULL(adm_persona.SegundoNombre, ''), 
-                ' ', adm_persona.ApellidoPaterno, ' ', adm_persona.ApellidoMaterno) AS Estudiante 
- FROM doc_estudiante,adm_persona
- WHERE doc_estudiante.IdPersona = adm_persona.IdPersona AND doc_estudiante.IdEstudiante = asociacion.IdEstudiante LIMIT 1) AS Estudiante,
- 
- 
-(SELECT CONCAT(adm_persona.PrimerNombre, ' ', IFNULL(adm_persona.SegundoNombre, ''), 
-                ' ', adm_persona.ApellidoPaterno, ' ', adm_persona.ApellidoMaterno) AS Profesor 
- FROM doc_profesor,adm_persona
- WHERE doc_profesor.IdPersona = adm_persona.IdPersona AND doc_profesor.IdProfesor = asociacion.IdProfesor LIMIT 1) AS Profesor,
- 
- (SELECT Entidad FROM entidad,detalle_entidad WHERE entidad.IdEntidad = detalle_entidad.IdEntidad AND entidad.IdEntidad = asociacion.IdEntidad2 LIMIT 1) AS Entidad,
-  (SELECT entidad.IdTipoEntidad FROM entidad WHERE  entidad.IdEntidad = asociacion.IdEntidad2 LIMIT 1) AS entidadIdTipoEntidad,
- (SELECT detalle_entidad.IdIdioma FROM entidad,detalle_entidad WHERE entidad.IdEntidad = detalle_entidad.IdEntidad AND entidad.IdEntidad = asociacion.IdEntidad2 LIMIT 1) AS DetalleIdIdioma
-,(SELECT idioma FROM idioma WHERE IdIdioma = DetalleIdIdioma LIMIT 1) AS Idioma
-               
- ,(SELECT TipoEntidad FROM tipo_entidad WHERE IdTipoEntidad = entidadIdTipoEntidad LIMIT 1) AS TipoEntidad
-,(SELECT TipoAsociacion FROM tipo_asociacion WHERE IdTipoAsociacion = asociacionIdTipoAsociacion) as TipoAsociacion                
-                        
-                ",
                 
+                "asociacion.IdEntidad1,asociacion.IdAsociacion,asociacion.IdEntidad2,
+                asociacion.IdTipoAsociacion,asociacion.IdEstudiante,asociacion.IdProfesor,
+                asociacion.Evaluacion,asociacion.Estado,asociacion.Nivel,asociacion.Comentario,asociacion.IdTipoAsociacion as asociacionIdTipoAsociacion,
+
+                (SELECT CONCAT(adm_persona.PrimerNombre, ' ', IFNULL(adm_persona.SegundoNombre, ''), 
+                                ' ', adm_persona.ApellidoPaterno, ' ', adm_persona.ApellidoMaterno) AS Estudiante 
+                 FROM doc_estudiante,adm_persona
+                 WHERE doc_estudiante.IdPersona = adm_persona.IdPersona AND doc_estudiante.IdEstudiante = asociacion.IdEstudiante LIMIT 1) AS Estudiante,
+
+
+                (SELECT CONCAT(adm_persona.PrimerNombre, ' ', IFNULL(adm_persona.SegundoNombre, ''), 
+                                ' ', adm_persona.ApellidoPaterno, ' ', adm_persona.ApellidoMaterno) AS Profesor 
+                 FROM doc_profesor,adm_persona
+                 WHERE doc_profesor.IdPersona = adm_persona.IdPersona AND doc_profesor.IdProfesor = asociacion.IdProfesor LIMIT 1) AS Profesor,
+
+                 (SELECT Entidad FROM entidad,detalle_entidad WHERE entidad.IdEntidad = detalle_entidad.IdEntidad AND entidad.IdEntidad = asociacion.IdEntidad2 LIMIT 1) AS Entidad,
+                  (SELECT entidad.IdTipoEntidad FROM entidad WHERE  entidad.IdEntidad = asociacion.IdEntidad2 LIMIT 1) AS entidadIdTipoEntidad,
+                 (SELECT detalle_entidad.IdIdioma FROM entidad,detalle_entidad WHERE entidad.IdEntidad = detalle_entidad.IdEntidad AND entidad.IdEntidad = asociacion.IdEntidad2 LIMIT 1) AS DetalleIdIdioma
+                ,(SELECT idioma FROM idioma WHERE IdIdioma = DetalleIdIdioma LIMIT 1) AS Idioma
+
+                 ,(SELECT TipoEntidad FROM tipo_entidad WHERE IdTipoEntidad = entidadIdTipoEntidad LIMIT 1) AS TipoEntidad
+                ,(SELECT TipoAsociacion FROM tipo_asociacion WHERE IdTipoAsociacion = asociacionIdTipoAsociacion) as TipoAsociacion                
+                        
+                ",                
             ])
           
             ->from('asociacion ')

@@ -147,7 +147,6 @@ class EntidadController extends RestController
             ->andFilterWhere(['entidad.Estado' => $estado])
             ->orderBy('countAsociaciones DESC');
           
-
         $additional_info = [
             'page' => 'No Define',
             'size' => 'No Define',
