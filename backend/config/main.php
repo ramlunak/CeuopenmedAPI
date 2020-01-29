@@ -136,6 +136,8 @@ return [
                 'idioma/create' => 'idioma/create',
                 'idioma/update/<id>' => 'idioma/update',
                 'idioma/delete/<id>' => 'idioma/delete',
+               
+              
 
                 // Tipo_Entidad
                 'tipo-entidad' => 'tipo-entidad/index',
@@ -225,6 +227,10 @@ return [
                 '<module:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>' => '<module>/<controller>/<action>',
                 // '<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
                 '<controller:\w+>/<action:\w+>/<idprofesor:\d+>/<idgrupo:\d+>' => '<controller>/<action>',
+           
+                //Visor
+                'visor' => 'visor/index',
+                'visor/entidad' => 'visor/entidad',
             ],
 
         ],

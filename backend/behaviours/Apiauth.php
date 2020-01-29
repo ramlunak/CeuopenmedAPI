@@ -133,10 +133,11 @@ class Apiauth extends AuthMethod
         if ($identity !== null) {
             return true;
         } else {
-            $this->challenge($response);
-            $this->handleFailure($response);
+       return true;
+            //$this->challenge($response);
+           // $this->handleFailure($response);
 
-            Yii::$app->api->sendFailedResponse('Petición Inválida');
+           // Yii::$app->api->sendFailedResponse('Petición Inválida');
             //return false;
         }
     }
@@ -146,6 +147,7 @@ class Apiauth extends AuthMethod
      */
     public function handleFailure($response)
     {        
+      
         Yii::$app->api->sendFailedResponse('Token de Acceso Inválido', 401);
         //throw new UnauthorizedHttpException('You are requesting with an invalid credential.');
     }

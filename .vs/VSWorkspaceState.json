@@ -1,9 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\backend",
-    "\\backend\\config"
+    ""
   ],
-  "SelectedNode": "\\backend\\config\\main.php",
+  "SelectedNode": "\\backend",
   "PreviewInSolutionExplorer": false
 }
