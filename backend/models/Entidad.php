@@ -203,7 +203,10 @@ class Entidad extends \yii\db\ActiveRecord
         if (isset($params['Comentario'])) {
             $query->andFilterWhere(['like', 'Comentario', $params['Comentario']]);
         }
-
+        if (isset($params['limit'])) {
+            $query->limit($params['limit']);
+        }
+      
         if (isset($order)) {
             $query->orderBy($order);
         }
