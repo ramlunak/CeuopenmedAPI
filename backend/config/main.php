@@ -92,6 +92,11 @@ return [
                 'adm-persona/update/<id>' => 'adm-persona/update',
                 'adm-persona/delete/<id>' => 'adm-persona/delete',
 
+                  // Adm_Persona
+                  'adm-traducciones' => 'adm-traducciones/index',
+                  'adm-traducciones/create' => 'adm-traducciones/create',
+                  'adm-traducciones/delete/<id>' => 'adm-traducciones/delete',
+                                
                 // Doc_Especialidad
                 'doc-especialidad' => 'doc-especialidad/index',
                 'doc-especialidad/view/<id>' => 'doc-especialidad/view',
