@@ -197,6 +197,7 @@ return [
                 'asociacion/associate-entitys/<identidad:\d+>' => 'asociacion/associate-entitys',
                 'asociacion/lista/<identidad:\d+>/<identidad2:\d+>' => 'asociacion/lista',
                 'asociacion/evaluated-associate-entitys/<identidad:\d+>' => 'asociacion/evaluated-associate-entitys',
+                'asociacion/evaluated-associate-entitys-simetricas/<identidad:\d+>' => 'asociacion/evaluated-associate-entitys-simetricas',
 
                 // Reportes
                 'reportes/count-evaluations-profesor/<idprofesor:\d+>' => 'reportes/count-evaluations-profesor',
