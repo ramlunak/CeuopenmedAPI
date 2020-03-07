@@ -198,6 +198,8 @@ return [
                 'asociacion/lista/<identidad:\d+>/<identidad2:\d+>' => 'asociacion/lista',
                 'asociacion/evaluated-associate-entitys/<identidad:\d+>' => 'asociacion/evaluated-associate-entitys',
                 'asociacion/evaluated-associate-entitys-simetricas/<identidad:\d+>' => 'asociacion/evaluated-associate-entitys-simetricas',
+                'asociacion/evaluated-associate-entitys-a/<identidad:\d+>' => 'asociacion/evaluated-associate-entitys-a',
+                'asociacion/evaluated-associate-entitys-b/<identidad:\d+>' => 'asociacion/evaluated-associate-entitys-b',
 
                 // Reportes
                 'reportes/count-evaluations-profesor/<idprofesor:\d+>' => 'reportes/count-evaluations-profesor',
