@@ -230,6 +230,7 @@ return [
                 //Visor
                 'visor' => 'visor/index',
                 'visor/entidad' => 'visor/entidad',
+                'visor/traducciones' => 'visor/traducciones',
             ],
 
         ],
