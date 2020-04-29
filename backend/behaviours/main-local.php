@@ -1,4 +1,5 @@
 <?php
+/*
 return [
     'components' => [
         'db' => [
@@ -14,3 +15,4 @@ return [
         ],
     ],
 ];
+*/
