@@ -35,6 +35,11 @@ class TipoAsociacion extends \yii\db\ActiveRecord
             [['IdTipoEntidad1', 'IdTipoEntidad2', 'TipoAsociacion'], 'required'],
             [['IdTipoEntidad1', 'IdTipoEntidad2'], 'integer'],
             [['TipoAsociacion'], 'string'],           
+            [['IdIdioma'], 'integer'],
+            [
+                ['IdIdioma'], 'exist', 'skipOnError' => true, 'targetClass' => Idioma::className(),
+                'targetAttribute' => ['IdIdioma' => 'IdIdioma'], 'message' => 'El Idioma que seleccionó no existe en la Base de Datos del Sistema.'
+            ],
             [
                 ['IdTipoEntidad1'], 'exist', 'skipOnError' => true, 'targetClass' => TipoEntidad::className(),
                 'targetAttribute' => ['IdTipoEntidad1' => 'IdTipoEntidad'], 'message' => 'El tipo entidad que seleccionó no existe en la Base de Datos del Sistema.'
@@ -67,7 +72,13 @@ class TipoAsociacion extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Asociacion::className(), ['IdTipoAsociacion' => 'IdTipoAsociacion']);
     }
-
+/**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIdioma()
+    {
+        return $this->hasOne(Idioma::className(), ['IdIdioma' => 'IdIdioma']);
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -98,9 +109,11 @@ class TipoAsociacion extends \yii\db\ActiveRecord
         $query = TipoAsociacion::find()
             ->select([
                 '{{tipo_asociacion}}.*',
+                'Idioma' ,
                 'tent1.TipoEntidad AS TipoEntidad1',
                 'tent2.TipoEntidad AS TipoEntidad2'
             ])
+            ->leftJoin('idioma', '`tipo_asociacion`.`IdIdioma` = `idioma`.`IdIdioma`')
             ->leftJoin('tipo_entidad AS tent1', '`tipo_asociacion`.`IdTipoEntidad1` = `tent1`.`IdTipoEntidad`')
             ->leftJoin('tipo_entidad AS tent2', '`tipo_asociacion`.`IdTipoEntidad2` = `tent2`.`IdTipoEntidad`')
             ->asArray(true);
@@ -118,7 +131,9 @@ class TipoAsociacion extends \yii\db\ActiveRecord
         if (isset($params['TipoAsociacion'])) {
             $query->andFilterWhere(['like', 'TipoAsociacion', $params['TipoAsociacion']]);
         }
-
+        if (isset($params['IdIdioma'])) {
+            $query->andFilterWhere(['detalle_entidad.IdIdioma' => $params['IdIdioma']]);
+        }
 
         if (isset($order)) {
             $query->orderBy($order);
