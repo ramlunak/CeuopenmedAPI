@@ -28,8 +28,12 @@ class VisorController extends RestController
                 'class' => Verbcheck::className(),
                 'actions' => [
                     'index' => ['GET', 'POST'],
+<<<<<<< HEAD
                     'entidad' => ['GET'],                  
                     'traducciones' => ['GET']                   
+=======
+                    'entidad' => ['GET']
+>>>>>>> af5def1b18c4e0044dc5a5cca325d41051c0bb05
                 ],
             ],
 
