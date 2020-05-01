@@ -1,0 +1,7 @@
+SELECT 
+doc_estudiante.IdEstudiante
+,(SELECT CONCAT(PrimerNombre, ' ', IFNULL(SegundoNombre, ''), ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto from adm_persona WHERE adm_persona.IdPersona = doc_estudiante.IdPersona) as usuario
+,(SELECT COUNT(IdEntidad) FROM entidad WHERE doc_estudiante.IdEstudiante = entidad.IdEstudiante) as entidades
+,(SELECT COUNT(IdAsociacion) FROM asociacion WHERE doc_estudiante.IdEstudiante = asociacion.IdEstudiante) as asociaciones
+,((SELECT COUNT(IdEntidad) FROM entidad WHERE doc_estudiante.IdEstudiante = entidad.IdEstudiante) + (SELECT COUNT(IdAsociacion) FROM asociacion WHERE doc_estudiante.IdEstudiante = asociacion.IdEstudiante)) as suma
+FROM doc_estudiante 
