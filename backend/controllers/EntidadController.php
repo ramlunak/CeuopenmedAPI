@@ -33,6 +33,8 @@ class EntidadController extends RestController
                     'view' => ['GET'],
                     'view-detalles' => ['GET'],
                     'profesor-evaluations' => ['GET'],
+                    'estadisticas-usuarios' => ['GET'],
+                    'entidades-menos-asociadas' => ['GET'],
                     'delete' => ['DELETE']
                 ],
             ],
@@ -160,4 +162,55 @@ class EntidadController extends RestController
         Yii::$app->api->sendSuccessResponse($response['data'], $response['info']);
     }    
  
+    public  function actionEstadisticasUsuarios()
+    {     
+        $model = (new \yii\db\Query())
+            ->select([
+                'doc_estudiante.IdEstudiante',
+                 "(SELECT CONCAT(PrimerNombre, ' ', IFNULL(SegundoNombre, ''), ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto from adm_persona WHERE adm_persona.IdPersona = doc_estudiante.IdPersona) as usuario",
+                 '(SELECT COUNT(IdEntidad) FROM entidad WHERE doc_estudiante.IdEstudiante = entidad.IdEstudiante) as entidades',
+                 '(SELECT COUNT(IdAsociacion) FROM asociacion WHERE doc_estudiante.IdEstudiante = asociacion.IdEstudiante) as asociaciones',
+                  '((SELECT COUNT(IdEntidad) FROM entidad WHERE doc_estudiante.IdEstudiante = entidad.IdEstudiante) + (SELECT COUNT(IdAsociacion) FROM asociacion WHERE doc_estudiante.IdEstudiante = asociacion.IdEstudiante)) as suma'
+            ])
+            ->from('doc_estudiante ')           
+            ->orderBy('suma DESC');
+          
+        $additional_info = [
+            'page' => 'No Define',
+            'size' => 'No Define',
+            'totalCount' => (int) $model->count()
+        ];
+
+        $response = [
+            'data' => $model->all(),
+            'info' => $additional_info
+        ];
+        Yii::$app->api->sendSuccessResponse($response['data'], $response['info']);
+    } 
+   
+    public  function actionEntidadesMenosAsociadas()
+    {     
+        $model = (new \yii\db\Query())
+            ->select([
+                'entidad.IdEntidad',
+                 "(SELECT entidad FROM detalle_entidad WHERE detalle_entidad.IdEntidad = entidad.IdEntidad LIMIT 1) as entidad",
+                 '(SELECT COUNT(IdAsociacion) FROM asociacion WHERE asociacion.IdEntidad1 = entidad.IdEntidad) as asociaciones',                 
+            ])
+            ->from('entidad ')           
+            ->orderBy('asociaciones ASC')
+            ->limit(200);
+          
+        $additional_info = [
+            'page' => 'No Define',
+            'size' => 'No Define',
+            'totalCount' => (int) $model->count()
+        ];
+
+        $response = [
+            'data' => $model->all(),
+            'info' => $additional_info
+        ];
+        Yii::$app->api->sendSuccessResponse($response['data'], $response['info']);
+    }
+
 }

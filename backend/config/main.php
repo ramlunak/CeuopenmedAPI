@@ -158,6 +158,8 @@ return [
                 'entidad/update/<id>' => 'entidad/update',
                 'entidad/delete/<id>' => 'entidad/delete',
                 'entidad/profesor-evaluations/<idprofesor:\d+>/<estado:\d+>' => 'entidad/profesor-evaluations',
+                'entidad/estadisticas-usuarios' => 'entidad/estadisticas-usuarios',
+                'entidad/entidades-menos-asociadas' => 'entidad/entidades-menos-asociadas',
 
                 // Detalle Entidad
                 'detalle-entidad' => 'detalle-entidad/index',
@@ -237,12 +239,8 @@ return [
            
                 //Visor
                 'visor' => 'visor/index',
-<<<<<<< HEAD
                 'visor/entidad' => 'visor/entidad',
                 'visor/traducciones' => 'visor/traducciones',
-=======
-                'visor/entidad' => 'visor/entidad'                
->>>>>>> af5def1b18c4e0044dc5a5cca325d41051c0bb05
             ],
 
         ],

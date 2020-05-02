@@ -17,6 +17,7 @@ use Yii;
  * @property int $Estado
  * @property double $Nivel
  * @property string $Comentario
+ * @property string $Descripcion
  *
  * @property DocEstudiante $estudiante
  * @property DocProfesor $profesor
@@ -45,6 +46,7 @@ class Asociacion extends \yii\db\ActiveRecord
             [['Nivel'], 'double'],
             [['IdEntidad1', 'IdEntidad2', 'IdTipoAsociacion', 'IdEstudiante', 'IdProfesor', 'Evaluacion', 'Estado'], 'integer'],
             [['Comentario'], 'string'],
+            [['Descripcion'], 'string'],
             [
                 ['IdEstudiante'], 'exist', 'skipOnError' => true, 'targetClass' => DocEstudiante::className(),
                 'targetAttribute' => ['IdEstudiante' => 'IdEstudiante'], 'message' => 'El estudiante que seleccionó no existe en la Base de Datos del Sistema.'
@@ -84,6 +86,7 @@ class Asociacion extends \yii\db\ActiveRecord
             'Estado' => 'Estado',
             'Nivel' => 'Nivel',
             'Comentario' => 'Comentario',
+            'Descripcion' => 'Descripción',
         ];
     }
 
