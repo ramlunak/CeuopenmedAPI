@@ -243,8 +243,10 @@ class AsociacionController extends RestController
                 "(SELECT TipoAsociacion FROM tipo_asociacion WHERE IdTipoAsociacion = asociacionIdTipoAsociacion) as TipoAsociacion",                
             ])
             ->distinct('entidad.IdEntidad')
-            ->from('doc_profesor_has_doc_grupo,doc_estudiante,entidad,adm_persona AS est,tipo_asociacion')
+            ->from('doc_profesor_has_doc_grupo,doc_estudiante,entidad,adm_persona AS est,tipo_asociacion')           
             ->where('doc_profesor_has_doc_grupo.IdGrupo = doc_estudiante.IdGrupo')
+            ->andWhere("(SELECT Estado FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )  LIMIT 1) = 1")
+            ->andWhere("(SELECT Evaluacion FROM asociacion WHERE (IdEntidad1 = " . $identidad . " AND IdEntidad2 = entidad.IdEntidad )   LIMIT 1) = 1")
             ->andWhere('entidad.IdEstudiante = doc_estudiante.IdEstudiante')
             ->andWhere('est.IdPersona = doc_estudiante.IdPersona')
             ->andWhere("
@@ -301,6 +303,8 @@ class AsociacionController extends RestController
             ->from('doc_profesor_has_doc_grupo,doc_estudiante,entidad,adm_persona AS est,tipo_asociacion')
             ->where('doc_profesor_has_doc_grupo.IdGrupo = doc_estudiante.IdGrupo')
             ->andWhere('entidad.IdEstudiante = doc_estudiante.IdEstudiante')
+            ->andWhere("(SELECT Estado FROM asociacion WHERE  (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad)  LIMIT 1) = 1")
+            ->andWhere("(SELECT Evaluacion FROM asociacion WHERE  (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad)  LIMIT 1) = 1")
             ->andWhere('est.IdPersona = doc_estudiante.IdPersona')
             ->andWhere("
                 (((tipo_asociacion.IdTipoEntidad1 = (SELECT IdTipoEntidad FROM entidad WHERE IdEntidad = " . $identidad . ") 

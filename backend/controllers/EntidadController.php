@@ -194,7 +194,7 @@ class EntidadController extends RestController
             ->select([
                 'entidad.IdEntidad',
                  "(SELECT entidad FROM detalle_entidad WHERE detalle_entidad.IdEntidad = entidad.IdEntidad LIMIT 1) as entidad",
-                 '(SELECT COUNT(IdAsociacion) FROM asociacion WHERE asociacion.IdEntidad1 = entidad.IdEntidad) as asociaciones',                 
+                 '(SELECT COUNT(IdAsociacion) FROM asociacion WHERE asociacion.IdEntidad1 = entidad.IdEntidad or asociacion.IdEntidad2 = entidad.IdEntidad ) as asociaciones',                 
             ])
             ->from('entidad ')           
             ->orderBy('asociaciones ASC')
