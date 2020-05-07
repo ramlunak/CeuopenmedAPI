@@ -307,8 +307,8 @@ class AsociacionController extends RestController
             ->andWhere("(SELECT Evaluacion FROM asociacion WHERE  (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad)  LIMIT 1) = 1")
             ->andWhere('est.IdPersona = doc_estudiante.IdPersona')
             ->andWhere("
-                (((tipo_asociacion.IdTipoEntidad1 = (SELECT IdTipoEntidad FROM entidad WHERE IdEntidad = " . $identidad . ") 
-                AND tipo_asociacion.IdTipoEntidad2 = entidad.IdTipoEntidad ) 
+                (((tipo_asociacion.IdTipoEntidad2 = (SELECT IdTipoEntidad FROM entidad WHERE IdEntidad = " . $identidad . ") 
+                AND tipo_asociacion.IdTipoEntidad1 = entidad.IdTipoEntidad ) 
                 ))
             ")
             ->andWhere("(SELECT COUNT(IdAsociacion) FROM asociacion WHERE  (IdEntidad2 = " . $identidad . " AND IdEntidad1 = entidad.IdEntidad) ) > 0")

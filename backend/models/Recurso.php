@@ -85,7 +85,7 @@ class Recurso extends \yii\db\ActiveRecord
 
 
         $query = Recurso::find()
-            ->select(['{{recurso}}.*'])
+            ->select(['{{recurso}}.*',"CONCAT('BuscarRecurso',recurso.IdRecurso) as Buscar"])
             ->asArray(true);
 
 
