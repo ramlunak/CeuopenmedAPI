@@ -88,7 +88,7 @@ class DetalleEntidad extends \yii\db\ActiveRecord
 
 
         $query = DetalleEntidad::find()
-            ->select(['{{detalle_entidad}}.*', 'Idioma'])            
+            ->select(['{{detalle_entidad}}.*', 'Idioma',"(Select IdTipoEntidad from entidad where detalle_entidad.IdEntidad = entidad.IdEntidad limit 1) as IdTipoEntidad"])            
             ->leftJoin('idioma', '`detalle_entidad`.`IdIdioma` = `idioma`.`IdIdioma`')
             ->asArray(true);
 
