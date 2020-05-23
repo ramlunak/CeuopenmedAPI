@@ -50,7 +50,7 @@ class TipoEntidad extends \yii\db\ActiveRecord
         return [
             'IdTipoEntidad' => 'Id Tipo Entidad',
             'IdIdioma' => 'Id Idioma',
-            'TipoEntidad' => 'Tipo Entidad',                       
+            'TipoEntidad' => 'Tipo Entidad',
         ];
     }
 
@@ -62,7 +62,7 @@ class TipoEntidad extends \yii\db\ActiveRecord
         return $this->hasMany(Entidad::className(), ['IdTipoEntidad' => 'IdTipoEntidad']);
     }
 
- /**
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getIdioma()
@@ -104,14 +104,15 @@ class TipoEntidad extends \yii\db\ActiveRecord
             $params = $search;
         }
 
-            $query = TipoEntidad::find()
-            ->select(['{{tipo_entidad}}.*', 'Idioma'])            
+        $query = TipoEntidad::find()
+            ->select(['{{tipo_entidad}}.*', 'Idioma'])
             ->leftJoin('idioma', '`tipo_entidad`.`IdIdioma` = `idioma`.`IdIdioma`')
+            ->orderBy('TipoEntidad')
             ->asArray(true);
 
         if (isset($params['IdTipoEntidad'])) {
             $query->andFilterWhere(['IdTipoEntidad' => $params['IdTipoEntidad']]);
-        }        
+        }
         if (isset($params['TipoEntidad'])) {
             $query->andFilterWhere(['like', 'TipoEntidad', $params['TipoEntidad']]);
         }
