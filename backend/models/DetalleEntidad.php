@@ -88,7 +88,11 @@ class DetalleEntidad extends \yii\db\ActiveRecord
 
 
         $query = DetalleEntidad::find()
-            ->select(['{{detalle_entidad}}.*', 'Idioma',"(Select IdTipoEntidad from entidad where detalle_entidad.IdEntidad = entidad.IdEntidad limit 1) as IdTipoEntidad"])            
+            ->select([
+                '{{detalle_entidad}}.*', 'Idioma',
+                "(Select IdTipoEntidad from entidad where detalle_entidad.IdEntidad = entidad.IdEntidad limit 1) as IdTipoEntidad",
+                "(Select TipoEntidad from tipo_entidad where tipo_entidad.IdTipoEntidad =  (Select IdTipoEntidad from entidad where detalle_entidad.IdEntidad = entidad.IdEntidad limit 1) limit 1) as TipoEntidad"
+            ])
             ->leftJoin('idioma', '`detalle_entidad`.`IdIdioma` = `idioma`.`IdIdioma`')
             ->asArray(true);
 
@@ -101,7 +105,7 @@ class DetalleEntidad extends \yii\db\ActiveRecord
         }
         if (isset($params['IdEntidad'])) {
             $query->andFilterWhere(['IdEntidad' => $params['IdEntidad']]);
-        }        
+        }
         if (isset($params['Entidad'])) {
             $query->andFilterWhere(['like', 'Entidad', $params['Entidad']]);
         }
