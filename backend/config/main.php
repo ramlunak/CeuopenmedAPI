@@ -158,6 +158,7 @@ return [
                 'entidad/update/<id>' => 'entidad/update',
                 'entidad/delete/<id>' => 'entidad/delete',
                 'entidad/profesor-evaluations/<idprofesor:\d+>/<estado:\d+>' => 'entidad/profesor-evaluations',
+                'entidad/create-descripcion/<idEntidad:\d+>/<idIdioma:\d+>/<descripcion:\d+>' => 'entidad/create-descripcion',
                 'entidad/estadisticas-usuarios' => 'entidad/estadisticas-usuarios',
                 'entidad/entidades-menos-asociadas' => 'entidad/entidades-menos-asociadas',
 
