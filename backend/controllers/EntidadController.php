@@ -44,7 +44,7 @@ class EntidadController extends RestController
 
     public function actionIndex()
     {
-        actionCreateDescripcion(1,1,"sdsad asdasdasd as");
+        $this->actionCreateDescripcion(1, 1, "sdsad asdasdasd as");
         $params = $this->request['search'];
         $response = Entidad::search($params);
         Yii::$app->api->sendSuccessResponse($response['data'], $response['info']);
@@ -149,7 +149,7 @@ class EntidadController extends RestController
             ->andFilterWhere(['doc_profesor_has_doc_grupo.IdProfesor' => $idprofesor])
             ->andFilterWhere(['entidad.Estado' => $estado])
             ->orderBy('countAsociaciones DESC');
-          
+
         $additional_info = [
             'page' => 'No Define',
             'size' => 'No Define',
@@ -161,21 +161,21 @@ class EntidadController extends RestController
             'info' => $additional_info
         ];
         Yii::$app->api->sendSuccessResponse($response['data'], $response['info']);
-    }    
- 
+    }
+
     public  function actionEstadisticasUsuarios()
-    {     
+    {
         $model = (new \yii\db\Query())
             ->select([
                 'doc_estudiante.IdEstudiante',
-                 "(SELECT CONCAT(PrimerNombre, ' ', IFNULL(SegundoNombre, ''), ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto from adm_persona WHERE adm_persona.IdPersona = doc_estudiante.IdPersona) as usuario",
-                 '(SELECT COUNT(IdEntidad) FROM entidad WHERE doc_estudiante.IdEstudiante = entidad.IdEstudiante) as entidades',
-                 '(SELECT COUNT(IdAsociacion) FROM asociacion WHERE doc_estudiante.IdEstudiante = asociacion.IdEstudiante) as asociaciones',
-                  '((SELECT COUNT(IdEntidad) FROM entidad WHERE doc_estudiante.IdEstudiante = entidad.IdEstudiante) + (SELECT COUNT(IdAsociacion) FROM asociacion WHERE doc_estudiante.IdEstudiante = asociacion.IdEstudiante)) as suma'
+                "(SELECT CONCAT(PrimerNombre, ' ', IFNULL(SegundoNombre, ''), ApellidoPaterno, ' ', ApellidoMaterno) AS NombreCompleto from adm_persona WHERE adm_persona.IdPersona = doc_estudiante.IdPersona) as usuario",
+                '(SELECT COUNT(IdEntidad) FROM entidad WHERE doc_estudiante.IdEstudiante = entidad.IdEstudiante) as entidades',
+                '(SELECT COUNT(IdAsociacion) FROM asociacion WHERE doc_estudiante.IdEstudiante = asociacion.IdEstudiante) as asociaciones',
+                '((SELECT COUNT(IdEntidad) FROM entidad WHERE doc_estudiante.IdEstudiante = entidad.IdEstudiante) + (SELECT COUNT(IdAsociacion) FROM asociacion WHERE doc_estudiante.IdEstudiante = asociacion.IdEstudiante)) as suma'
             ])
-            ->from('doc_estudiante ')           
+            ->from('doc_estudiante ')
             ->orderBy('suma DESC');
-          
+
         $additional_info = [
             'page' => 'No Define',
             'size' => 'No Define',
@@ -187,20 +187,20 @@ class EntidadController extends RestController
             'info' => $additional_info
         ];
         Yii::$app->api->sendSuccessResponse($response['data'], $response['info']);
-    } 
-   
+    }
+
     public  function actionEntidadesMenosAsociadas()
-    {     
+    {
         $model = (new \yii\db\Query())
             ->select([
                 'entidad.IdEntidad',
-                 "(SELECT entidad FROM detalle_entidad WHERE detalle_entidad.IdEntidad = entidad.IdEntidad LIMIT 1) as entidad",
-                 '(SELECT COUNT(IdAsociacion) FROM asociacion WHERE asociacion.IdEntidad1 = entidad.IdEntidad or asociacion.IdEntidad2 = entidad.IdEntidad ) as asociaciones',                 
+                "(SELECT entidad FROM detalle_entidad WHERE detalle_entidad.IdEntidad = entidad.IdEntidad LIMIT 1) as entidad",
+                '(SELECT COUNT(IdAsociacion) FROM asociacion WHERE asociacion.IdEntidad1 = entidad.IdEntidad or asociacion.IdEntidad2 = entidad.IdEntidad ) as asociaciones',
             ])
-            ->from('entidad ')           
+            ->from('entidad ')
             ->orderBy('asociaciones ASC')
             ->limit(200);
-          
+
         $additional_info = [
             'page' => 'No Define',
             'size' => 'No Define',
@@ -215,12 +215,15 @@ class EntidadController extends RestController
     }
 
     //Entidad Descripcion
-    public function actionCreateDescripcion($idEntidad,$idIdioma,$descripcion){
+    public function actionCreateDescripcion($idEntidad, $idIdioma, $descripcion)
+    {
 
-       $sql = "insert into entidad_descripcion (idEntidad,idIdioma,descripcion) values (:idEntidad,:idIdioma,:descripcion)";
-       $parameters = array(":idEntidad"=>$idEntidad, ':idIdioma' => $idIdioma,':descripcion' => $descripcion);
-       Yii::app()->db->createCommand($sql)->execute($parameters);
-    
+        $sql = "insert into entidad_descripcion (idEntidad,idIdioma,descripcion) values (:idEntidad,:idIdioma,:descripcion)";
+        $parameters = array(":idEntidad" => $idEntidad, ':idIdioma' => $idIdioma, ':descripcion' => $descripcion);
+        Yii::$app->db->createCommand()->insert('entidad_descripcion', [
+            'idEntidad' => 1,
+            'idIdioma' => 1,
+            'descripcion' => 'dsfsdf'
+        ])->execute();
     }
-
 }
