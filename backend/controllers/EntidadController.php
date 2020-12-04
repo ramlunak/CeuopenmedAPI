@@ -44,7 +44,6 @@ class EntidadController extends RestController
 
     public function actionIndex()
     {
-        $this->actionCreateDescripcion(1, 1, "sdsad asdasdasd as");
         $params = $this->request['search'];
         $response = Entidad::search($params);
         Yii::$app->api->sendSuccessResponse($response['data'], $response['info']);
@@ -217,7 +216,6 @@ class EntidadController extends RestController
     //Entidad Descripcion
     public function actionCreateDescripcion($idEntidad, $idIdioma, $descripcion)
     {
-
         $sql = "insert into entidad_descripcion (idEntidad,idIdioma,descripcion) values (:idEntidad,:idIdioma,:descripcion)";
         $parameters = array(":idEntidad" => $idEntidad, ':idIdioma' => $idIdioma, ':descripcion' => $descripcion);
         Yii::$app->db->createCommand()->insert('entidad_descripcion', [
