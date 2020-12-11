@@ -92,11 +92,11 @@ return [
                 'adm-persona/update/<id>' => 'adm-persona/update',
                 'adm-persona/delete/<id>' => 'adm-persona/delete',
 
-                  // Adm_Persona
-                  'adm-traducciones' => 'adm-traducciones/index',
-                  'adm-traducciones/create' => 'adm-traducciones/create',
-                  'adm-traducciones/delete/<id>' => 'adm-traducciones/delete',
-                                
+                // Adm_Persona
+                'adm-traducciones' => 'adm-traducciones/index',
+                'adm-traducciones/create' => 'adm-traducciones/create',
+                'adm-traducciones/delete/<id>' => 'adm-traducciones/delete',
+
                 // Doc_Especialidad
                 'doc-especialidad' => 'doc-especialidad/index',
                 'doc-especialidad/view/<id>' => 'doc-especialidad/view',
@@ -141,7 +141,7 @@ return [
                 'idioma/create' => 'idioma/create',
                 'idioma/update/<id>' => 'idioma/update',
                 'idioma/delete/<id>' => 'idioma/delete',
-                            
+
 
                 // Tipo_Entidad
                 'tipo-entidad' => 'tipo-entidad/index',
@@ -155,10 +155,12 @@ return [
                 'entidad/view/<id>' => 'entidad/view',
                 'entidad/view-detalles/<id>' => 'entidad/view-detalles',
                 'entidad/create' => 'entidad/create',
+                'entidad/create-d' => 'entidad/create-d',
                 'entidad/update/<id>' => 'entidad/update',
                 'entidad/delete/<id>' => 'entidad/delete',
                 'entidad/profesor-evaluations/<idprofesor:\d+>/<estado:\d+>' => 'entidad/profesor-evaluations',
                 'entidad/create-descripcion/<idEntidad:\d+>/<idIdioma:\d+>/<descripcion:\d+>' => 'entidad/create-descripcion',
+                'entidad/descripciones/<idEntidad:\d+>' => 'entidad/descripciones',
                 'entidad/estadisticas-usuarios' => 'entidad/estadisticas-usuarios',
                 'entidad/entidades-menos-asociadas' => 'entidad/entidades-menos-asociadas',
 
@@ -196,7 +198,7 @@ return [
                 'asociacion/view/<id>' => 'asociacion/view',
                 'asociacion/create' => 'asociacion/create',
                 'asociacion/update/<id>' => 'asociacion/update',
-                'asociacion/delete/<id>' => 'asociacion/delete',              
+                'asociacion/delete/<id>' => 'asociacion/delete',
                 'asociacion/associate-entitys/<identidad:\d+>' => 'asociacion/associate-entitys',
                 'asociacion/lista/<identidad:\d+>/<identidad2:\d+>' => 'asociacion/lista',
                 'asociacion/evaluated-associate-entitys/<identidad:\d+>' => 'asociacion/evaluated-associate-entitys',
@@ -237,7 +239,7 @@ return [
                 '<module:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>' => '<module>/<controller>/<action>',
                 // '<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
                 '<controller:\w+>/<action:\w+>/<idprofesor:\d+>/<idgrupo:\d+>' => '<controller>/<action>',
-           
+
                 //Visor
                 'visor' => 'visor/index',
                 'visor/entidad' => 'visor/entidad',

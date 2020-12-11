@@ -29,10 +29,12 @@ class EntidadController extends RestController
                 'actions' => [
                     'index' => ['GET', 'POST'],
                     'create' => ['POST'],
+                    'create-d' => ['POST'],
                     'update' => ['PUT'],
                     'view' => ['GET'],
                     'view-detalles' => ['GET'],
                     'profesor-evaluations' => ['GET'],
+                    'create-descripcion' => ['GET'],
                     'estadisticas-usuarios' => ['GET'],
                     'entidades-menos-asociadas' => ['GET'],
                     'delete' => ['DELETE']
@@ -60,6 +62,16 @@ class EntidadController extends RestController
             Yii::$app->api->sendFailedResponse($model->errors);
         }
     }
+
+    public function actionCreateD()
+    {
+        $model = new Entidad;
+        $model->attributes = $this->request;
+
+        $parameters = array('idEntidad' => $model->IdEstudiante, 'idIdioma' => $model->IdTipoEntidad, 'descripcion' => $model->Comentario);
+        Yii::$app->db->createCommand()->insert('entidad_descripcion', $parameters)->execute();
+    }
+
 
     public function actionUpdate($id)
     {
@@ -216,12 +228,36 @@ class EntidadController extends RestController
     //Entidad Descripcion
     public function actionCreateDescripcion($idEntidad, $idIdioma, $descripcion)
     {
+        /*
         $sql = "insert into entidad_descripcion (idEntidad,idIdioma,descripcion) values (:idEntidad,:idIdioma,:descripcion)";
-        $parameters = array(":idEntidad" => $idEntidad, ':idIdioma' => $idIdioma, ':descripcion' => $descripcion);
-        Yii::$app->db->createCommand()->insert('entidad_descripcion', [
-            'idEntidad' => 1,
-            'idIdioma' => 1,
-            'descripcion' => 'dsfsdf'
-        ])->execute();
+        $parameters = array('idEntidad' => $idEntidad, 'idIdioma' => $idIdioma, 'descripcion' => $descripcion);
+        Yii::$app->db->createCommand()->insert('entidad_descripcion', $parameters)->execute();*/
+    }
+
+    public  function actionDescripciones($idEntidad)
+    {
+        $model = (new \yii\db\Query())
+            ->select([
+                'idEntidadDescripcion',
+                'idEntidad',
+                'idIdioma',
+                '(SELECT idioma FROM idioma WHERE IdIdioma = idIdioma LIMIT 1) AS idioma',
+                'descripcion',
+            ])
+            ->from('entidad_descripcion ')
+            ->where('1 = 1')
+            ->andFilterWhere(['entidad_descripcion.idEntidad' => $idEntidad]);
+
+        $additional_info = [
+            'page' => 'No Define',
+            'size' => 'No Define',
+            'totalCount' => (int) $model->count()
+        ];
+
+        $response = [
+            'data' => $model->all(),
+            'info' => $additional_info
+        ];
+        Yii::$app->api->sendSuccessResponse($response['data'], $response['info']);
     }
 }
