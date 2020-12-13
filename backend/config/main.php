@@ -157,6 +157,7 @@ return [
                 'entidad/create' => 'entidad/create',
                 'entidad/create-d' => 'entidad/create-d',
                 'entidad/update/<id>' => 'entidad/update',
+                'entidad/update-d/<id>' => 'entidad/update-d',
                 'entidad/delete/<id>' => 'entidad/delete',
                 'entidad/profesor-evaluations/<idprofesor:\d+>/<estado:\d+>' => 'entidad/profesor-evaluations',
                 'entidad/create-descripcion/<idEntidad:\d+>/<idIdioma:\d+>/<descripcion:\d+>' => 'entidad/create-descripcion',
