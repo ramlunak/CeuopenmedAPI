@@ -73,6 +73,17 @@ class EntidadController extends RestController
         Yii::$app->db->createCommand()->insert('entidad_descripcion', $parameters)->execute();
     }
 
+    public function actionUpdateD()
+    {
+        $model = new Entidad;
+        $model->attributes = $this->request;
+
+        Yii::$app->db->createCommand("UPDATE entidad_descripcion SET idEntidad=:idEntidad, descripcion=:descripcion WHERE id=:id")
+        ->bindValue(':id', id)
+        ->bindValue(':column1', :column1_value)
+        ->bindValue(':column2', :column2_value)
+        ->execute();
+    }
 
     public function actionUpdate($id)
     {
