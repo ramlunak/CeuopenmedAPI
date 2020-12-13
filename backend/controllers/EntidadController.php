@@ -35,6 +35,7 @@ class EntidadController extends RestController
                     'view-detalles' => ['GET'],
                     'profesor-evaluations' => ['GET'],
                     'create-descripcion' => ['GET'],
+                    'delete-descripcion' => ['GET'],
                     'estadisticas-usuarios' => ['GET'],
                     'entidades-menos-asociadas' => ['GET'],
                     'delete' => ['DELETE']
@@ -226,12 +227,11 @@ class EntidadController extends RestController
     }
 
     //Entidad Descripcion
-    public function actionCreateDescripcion($idEntidad, $idIdioma, $descripcion)
+    public function actionDeleteDescripcion($id)
     {
-        /*
-        $sql = "insert into entidad_descripcion (idEntidad,idIdioma,descripcion) values (:idEntidad,:idIdioma,:descripcion)";
-        $parameters = array('idEntidad' => $idEntidad, 'idIdioma' => $idIdioma, 'descripcion' => $descripcion);
-        Yii::$app->db->createCommand()->insert('entidad_descripcion', $parameters)->execute();*/
+        Yii::$app->db->createCommand('delete from entidad_descripcion where idEntidadDescripcion = :id')->bindValue('id', intval($id))->queryAll();
+
+        Yii::$app->api->sendSuccessResponse(true);
     }
 
     public  function actionDescripciones($idEntidad)
@@ -241,7 +241,7 @@ class EntidadController extends RestController
                 'idEntidadDescripcion',
                 'idEntidad',
                 'idIdioma',
-                '(SELECT idioma FROM idioma WHERE IdIdioma = idIdioma LIMIT 1) AS idioma',
+                '(SELECT idioma FROM idioma WHERE idioma.IdIdioma = entidad_descripcion.idIdioma LIMIT 1) as idioma',
                 'descripcion',
             ])
             ->from('entidad_descripcion ')
