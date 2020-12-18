@@ -247,17 +247,30 @@ class EntidadController extends RestController
 
     public  function actionDescripciones($idEntidad)
     {
-        $model = (new \yii\db\Query())
-            ->select([
-                'idEntidadDescripcion',
-                'idEntidad',
-                'idIdioma',
-                '(SELECT idioma FROM idioma WHERE idioma.IdIdioma = entidad_descripcion.idIdioma LIMIT 1) as idioma',
-                'descripcion',
-            ])
-            ->from('entidad_descripcion ')
-            ->where('1 = 1')
-            ->andFilterWhere(['entidad_descripcion.idEntidad' => $idEntidad]);
+        if ($idEntidad > 0) {
+            $model = (new \yii\db\Query())
+                ->select([
+                    'idEntidadDescripcion',
+                    'idEntidad',
+                    'idIdioma',
+                    '(SELECT idioma FROM idioma WHERE idioma.IdIdioma = entidad_descripcion.idIdioma LIMIT 1) as idioma',
+                    'descripcion',
+                ])
+                ->from('entidad_descripcion ')
+                ->where('1 = 1')
+                ->andFilterWhere(['entidad_descripcion.idEntidad' => $idEntidad]);
+        } else {
+            $model = (new \yii\db\Query())
+                ->select([
+                    'idEntidadDescripcion',
+                    'idEntidad',
+                    'idIdioma',
+                    '(SELECT idioma FROM idioma WHERE idioma.IdIdioma = entidad_descripcion.idIdioma LIMIT 1) as idioma',
+                    'descripcion',
+                ])
+                ->from('entidad_descripcion ')
+                ->where('1 = 1');
+        }
 
         $additional_info = [
             'page' => 'No Define',
